@@ -12,4 +12,5 @@ export const lightTheme = createTheme({
   typography: {
     fontFamily: "var(--font-vazir), Arial",
   },
+  direction: "rtl",
 });

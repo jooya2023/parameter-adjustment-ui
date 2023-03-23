@@ -4,6 +4,16 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import "./globals.css";
 import { lightTheme } from "./theme/themes";
 import localFont from "next/font/local";
+import rtlPlugin from "stylis-plugin-rtl";
+import { CacheProvider } from "@emotion/react";
+import createCache from "@emotion/cache";
+// import { prefixer } from "stylis";
+
+// Create rtl cache
+const cacheRtl = createCache({
+  key: "muirtl",
+  stylisPlugins: [rtlPlugin],
+});
 
 const vazirFont = localFont({
   src: "./fonts/vazir/Vazirmatn-FD-Regular.woff2",
@@ -22,11 +32,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={vazirFont.variable}>
-      <ThemeProvider theme={lightTheme}>
-        <CssBaseline />
-        <body id="__next">{children}</body>
-      </ThemeProvider>
+    <html lang="en" className={vazirFont.variable} dir="rtl">
+      <CacheProvider value={cacheRtl}>
+        <ThemeProvider theme={lightTheme}>
+          <CssBaseline />
+          <body id="__next">{children}</body>
+        </ThemeProvider>
+      </CacheProvider>
     </html>
   );
 }
