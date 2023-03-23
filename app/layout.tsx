@@ -3,6 +3,13 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import "./globals.css";
 import { lightTheme } from "./theme/themes";
+import localFont from "next/font/local";
+
+const vazirFont = localFont({
+  src: "./fonts/vazir/Vazirmatn-FD-Regular.woff2",
+  display: "swap",
+  variable: "--font-vazir",
+});
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -15,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={vazirFont.variable}>
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
         <body id="__next">{children}</body>

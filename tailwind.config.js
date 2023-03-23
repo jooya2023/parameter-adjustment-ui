@@ -6,7 +6,12 @@ module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx,css}"],
   important: "#__next",
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-vazir)"],
+        mono: ["var(--font-vazir)"],
+      },
+    },
   },
   plugins: [],
 };

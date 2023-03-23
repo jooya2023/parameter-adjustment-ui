@@ -9,4 +9,7 @@ export const lightTheme = createTheme({
   palette: {
     mode: "light",
   },
+  typography: {
+    fontFamily: "var(--font-vazir), Arial",
+  },
 });
