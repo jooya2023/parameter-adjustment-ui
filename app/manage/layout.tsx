@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import {
   AppBar,
   Toolbar,
@@ -8,11 +9,8 @@ import {
   Avatar,
 } from "@mui/material";
 
-function ManageLayout({
-  children, // will be a page or nested layout
-}: {
-  children: React.ReactNode;
-}) {
+function ManageLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   return (
     <div className="h-screen flex flex-col gap-2">
       <AppBar position="static" className="bg-gray-100" elevation={0}>
@@ -26,7 +24,12 @@ function ManageLayout({
           </Typography>
           <div className="flex-1 text-center">
             <Button color="primary">خانه</Button>
-            <Button color="primary">تنظیم پارامتر</Button>
+            <Button
+              color="primary"
+              onClick={() => router.push("/manage/Parameter-settings")}
+            >
+              تنظیم پارامتر
+            </Button>
             <Button color="primary">تنظیمات پایه</Button>
             <Button color="primary">کاربران</Button>
           </div>
