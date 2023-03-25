@@ -26,11 +26,16 @@ function ManageLayout({ children }: { children: React.ReactNode }) {
             <Button color="primary">خانه</Button>
             <Button
               color="primary"
-              onClick={() => router.push("/manage/Parameter-settings")}
+              onClick={() => router.push("/manage/parameter-settings")}
             >
               تنظیم پارامتر
             </Button>
-            <Button color="primary">تنظیمات پایه</Button>
+            <Button
+              color="primary"
+              onClick={() => router.push("/manage/base-settings")}
+            >
+              تنظیمات پایه
+            </Button>
             <Button color="primary">کاربران</Button>
           </div>
           <Avatar>H</Avatar>
