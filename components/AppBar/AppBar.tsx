@@ -16,7 +16,12 @@ function ApplicationBar() {
     router.push("/auth/login");
   }
   return (
-    <AppBar position="static" className="bg-gray-100" elevation={0}>
+    <AppBar
+      position="static"
+      elevation={0}
+      color="secondary"
+      //   className="bg-gray-200"
+    >
       <Toolbar>
         <Typography
           variant="subtitle1"

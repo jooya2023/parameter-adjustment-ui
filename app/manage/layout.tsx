@@ -4,7 +4,9 @@ function ManageLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <ApplicationBar />
-      <div className="h-screen flex flex-col gap-2">{children}</div>;
+      <div className="h-[calc(100vh_-_94px)] flex flex-col gap-2">
+        {children}
+      </div>
     </>
   );
 }
