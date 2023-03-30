@@ -31,7 +31,12 @@ function ApplicationBar() {
           توسعه فولادآلیاژی ایرانیان
         </Typography>
         <div className="flex-1 text-center">
-          <Button color="primary">خانه</Button>
+          <Button
+            color="primary"
+            onClick={() => router.push("/manage/dashboard")}
+          >
+            خانه
+          </Button>
           <Button
             color="primary"
             onClick={() => router.push("/manage/parameter-settings")}

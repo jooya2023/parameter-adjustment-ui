@@ -6,8 +6,10 @@ import {
   Divider,
 } from "@mui/material";
 import React from "react";
+import BaseSettingsInfoChart from "../Charts/BaseSettingsInfoChart/BaseSettingsInfoChart";
 
 export type BaseSettingFurnaceItemType = {
+  id: number;
   name: string;
   baseSettings: {
     tabToTab: number;
@@ -102,8 +104,8 @@ function BaseSettingFurnaceItem({
           <Divider orientation="vertical" flexItem className="px-2" />
           <div className="w-[350px] text-center flex justify-center flex-col items-center">
             <span>نمودار ها</span>
-            <div className="bg-slate-700 w-[250px] h-[250px]">ss</div>
-            <div className="bg-slate-700 w-[250px] h-[250px] mt-2">ss</div>
+            <BaseSettingsInfoChart />
+            <BaseSettingsInfoChart />
           </div>
         </div>
       </CardContent>
