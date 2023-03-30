@@ -14,70 +14,121 @@ import {
 import React from "react";
 import { AiOutlineReload, AiOutlineCheck } from "react-icons/ai";
 
-const BaseSettingFurnaceData: BaseSettingFurnaceItemType[] = [
-  {
-    name: "کوره ۱",
-    baseSettings: {
-      tabToTab: 5,
-      powerOn: 5,
+type BaseSettingsType = {
+  furnaces: BaseSettingFurnaceItemType[];
+  // TODO: move it outside.
+  chargeRate: {
+    iron: number;
+    lime: number;
+    dolomite: number;
+  };
+};
+
+const BaseSetting: BaseSettingsType = {
+  furnaces: [
+    {
+      id: 1,
+      name: "کوره ۱",
+      baseSettings: {
+        tabToTab: 5,
+        powerOn: 5,
+      },
+      usage: {
+        lime: 5,
+        dolomite: 5,
+      },
+      maxCapacity: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
+      minCapacity: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
+      arrivalDelay: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
+      emptyingDelay: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
     },
-    usage: {
-      lime: 5,
-      dolomite: 5,
+    {
+      id: 2,
+      name: "کوره ۲",
+      baseSettings: {
+        tabToTab: 5,
+        powerOn: 5,
+      },
+      usage: {
+        lime: 5,
+        dolomite: 5,
+      },
+      maxCapacity: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
+      minCapacity: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
+      arrivalDelay: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
+      emptyingDelay: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
     },
-    maxCapacity: {
-      iron: 5,
-      lime: 5,
-      dolomite: 5,
+    {
+      id: 3,
+      name: "کوره ۳",
+      baseSettings: {
+        tabToTab: 5,
+        powerOn: 5,
+      },
+      usage: {
+        lime: 5,
+        dolomite: 5,
+      },
+      maxCapacity: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
+      minCapacity: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
+      arrivalDelay: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
+      emptyingDelay: {
+        iron: 5,
+        lime: 5,
+        dolomite: 5,
+      },
     },
-    minCapacity: {
-      iron: 5,
-      lime: 5,
-      dolomite: 5,
-    },
-    arrivalDelay: {
-      iron: 5,
-      lime: 5,
-      dolomite: 5,
-    },
-    emptyingDelay: {
-      iron: 5,
-      lime: 5,
-      dolomite: 5,
-    },
+  ],
+  chargeRate: {
+    iron: 5,
+    lime: 5,
+    dolomite: 5,
   },
-  {
-    name: "کوره ۲",
-    baseSettings: {
-      tabToTab: 5,
-      powerOn: 5,
-    },
-    usage: {
-      lime: 5,
-      dolomite: 5,
-    },
-    maxCapacity: {
-      iron: 5,
-      lime: 5,
-      dolomite: 5,
-    },
-    minCapacity: {
-      iron: 5,
-      lime: 5,
-      dolomite: 5,
-    },
-    arrivalDelay: {
-      iron: 5,
-      lime: 5,
-      dolomite: 5,
-    },
-    emptyingDelay: {
-      iron: 5,
-      lime: 5,
-      dolomite: 5,
-    },
-  },
-];
+};
 
 function BaseSettingsPage() {
   return (
@@ -108,7 +159,7 @@ function BaseSettingsPage() {
           </div>
         </CardContent>
       </Card>
-      {BaseSettingFurnaceData.map((BaseSettingFurnaceDataItem) => {
+      {BaseSetting.furnaces.map((BaseSettingFurnaceDataItem) => {
         return (
           <BaseSettingFurnaceItem
             data={BaseSettingFurnaceDataItem}

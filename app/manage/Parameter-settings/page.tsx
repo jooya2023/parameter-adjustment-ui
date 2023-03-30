@@ -7,113 +7,121 @@ import { Button, Card, CardContent, Typography } from "@mui/material";
 import React from "react";
 import { AiOutlineReload, AiOutlineCheck } from "react-icons/ai";
 
-const gatesStatus: gateStatusType[] = [
-  {
-    gate: {
-      id: undefined,
-      label: undefined,
-    },
-    time: new Date(new Date().setMinutes(new Date().getMinutes() - 4)),
-    duration: 4,
-  },
-  {
-    gate: {
-      id: undefined,
-      label: undefined,
-    },
-    time: new Date(new Date().setMinutes(new Date().getMinutes() - 8)),
-    duration: 4,
-  },
-  {
-    gate: {
-      id: undefined,
-      label: undefined,
-    },
-    time: new Date(new Date().setMinutes(new Date().getMinutes() - 12)),
-    duration: 4,
-  },
-];
+type parameterSettingsType = {
+  furnaces: ParameterFurnaceItemType[];
+  gatesStatus: gateStatusType[];
+};
 
-const ParameterFurnaces: ParameterFurnaceItemType[] = [
-  {
-    name: "کوره ۱",
-    ironUsage: {
-      withoutSeed: 50,
-      withSeed: 40,
+const dummyParameterSettings: parameterSettingsType = {
+  furnaces: [
+    {
+      id: 1,
+      name: "کوره ۱",
+      ironUsage: {
+        withoutSeed: 50,
+        withSeed: 40,
+      },
+      tanks: [
+        {
+          material: "آهن اسفنجی",
+          name: "مخزن ۹",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+        {
+          material: "آهن اسفنجی",
+          name: "مخزن ۱۰",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+        {
+          material: "لایم",
+          name: "مخزن ۵",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+        {
+          material: "دولومیت",
+          name: "مخزن ۷",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+        {
+          material: "پین کمکی",
+          name: "مخزن ۱۰",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+      ],
     },
-    tanks: [
-      {
-        material: "آهن اسفنجی",
-        name: "مخزن ۹",
-        amount: 40,
-        inActiveDuration: 0,
+    {
+      id: 2,
+      name: "کوره ۲",
+      ironUsage: {
+        withoutSeed: 50,
+        withSeed: 40,
       },
-      {
-        material: "آهن اسفنجی",
-        name: "مخزن ۱۰",
-        amount: 40,
-        inActiveDuration: 0,
-      },
-      {
-        material: "لایم",
-        name: "مخزن ۵",
-        amount: 40,
-        inActiveDuration: 0,
-      },
-      {
-        material: "دولومیت",
-        name: "مخزن ۷",
-        amount: 40,
-        inActiveDuration: 0,
-      },
-      {
-        material: "پین کمکی",
-        name: "مخزن ۱۰",
-        amount: 40,
-        inActiveDuration: 0,
-      },
-    ],
-  },
-  {
-    name: "کوره ۲",
-    ironUsage: {
-      withoutSeed: 50,
-      withSeed: 40,
+      tanks: [
+        {
+          material: "آهن اسفنجی",
+          name: "مخزن ۹",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+        {
+          material: "آهن اسفنجی",
+          name: "مخزن ۱۰",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+        {
+          material: "لایم",
+          name: "مخزن ۵",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+        {
+          material: "دولومیت",
+          name: "مخزن ۷",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+        {
+          material: "پین کمکی",
+          name: "مخزن ۱۰",
+          amount: 40,
+          inActiveDuration: 0,
+        },
+      ],
     },
-    tanks: [
-      {
-        material: "آهن اسفنجی",
-        name: "مخزن ۹",
-        amount: 40,
-        inActiveDuration: 0,
+  ],
+  gatesStatus: [
+    {
+      gate: {
+        id: undefined,
+        label: undefined,
       },
-      {
-        material: "آهن اسفنجی",
-        name: "مخزن ۱۰",
-        amount: 40,
-        inActiveDuration: 0,
+      time: new Date(new Date().setMinutes(new Date().getMinutes() - 4)),
+      duration: 4,
+    },
+    {
+      gate: {
+        id: undefined,
+        label: undefined,
       },
-      {
-        material: "لایم",
-        name: "مخزن ۵",
-        amount: 40,
-        inActiveDuration: 0,
+      time: new Date(new Date().setMinutes(new Date().getMinutes() - 8)),
+      duration: 4,
+    },
+    {
+      gate: {
+        id: undefined,
+        label: undefined,
       },
-      {
-        material: "دولومیت",
-        name: "مخزن ۷",
-        amount: 40,
-        inActiveDuration: 0,
-      },
-      {
-        material: "پین کمکی",
-        name: "مخزن ۱۰",
-        amount: 40,
-        inActiveDuration: 0,
-      },
-    ],
-  },
-];
+      time: new Date(new Date().setMinutes(new Date().getMinutes() - 12)),
+      duration: 4,
+    },
+  ],
+};
 
 function ParameterSettingsPage() {
   return (
@@ -141,7 +149,7 @@ function ParameterSettingsPage() {
       </div>
       <div className="flex flex-row pt-2 gap-2">
         <div className="flex-1 gap-4 flex flex-col">
-          {ParameterFurnaces.map((ParameterFurnace) => {
+          {dummyParameterSettings.furnaces.map((ParameterFurnace) => {
             return (
               <ParameterFurnaceItem
                 data={ParameterFurnace}
@@ -158,7 +166,7 @@ function ParameterSettingsPage() {
             <Typography variant="subtitle2">
               وضعیت دریچه ها در ۱۲ دقیقه قبل
             </Typography>
-            {gatesStatus.map((gateStatus, index) => {
+            {dummyParameterSettings.gatesStatus.map((gateStatus, index) => {
               return (
                 <GateStatus
                   key={`gate status ${index}`}

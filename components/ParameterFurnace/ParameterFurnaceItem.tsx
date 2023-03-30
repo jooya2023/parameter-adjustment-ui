@@ -16,6 +16,7 @@ type ParameterFurnaceItemTank = {
 };
 
 export type ParameterFurnaceItemType = {
+  id: number;
   name: string;
   tanks: ParameterFurnaceItemTank[];
   ironUsage: {
