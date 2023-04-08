@@ -13,7 +13,7 @@ function ApplicationBar() {
   const router = useRouter();
 
   function handleLogout() {
-    router.push("/auth/login");
+    router.push("/users/login");
   }
   return (
     <AppBar

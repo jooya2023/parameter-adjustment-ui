@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import Chart from "react-apexcharts";
 import fa from "apexcharts/dist/locales/fa.json";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Tabs, Tab } from "@mui/material";
 
 const series = [
@@ -292,7 +292,6 @@ function DashboardPinTimeChart() {
         type="rangeBar"
         height="700px"
       />
-      <Toaster containerStyle={{ direction: "rtl" }} />
     </div>
   );
 }
