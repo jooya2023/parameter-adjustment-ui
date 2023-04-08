@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
 
 const userTypes: autoCompleteOption[] = [
@@ -28,6 +28,10 @@ const userTypes: autoCompleteOption[] = [
   },
 ];
 function EditUserPage() {
+  const [firstAndLastName, setFirstAndLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [UserType, setUserType] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   return (
     <div className="p-2">
       <div className="flex flex-row mb-2">
