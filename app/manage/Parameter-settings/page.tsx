@@ -1,183 +1,138 @@
 "use client";
-import ParameterFurnaceItem, {
-  ParameterFurnaceItemType,
-} from "@/components/ParameterFurnace/ParameterFurnaceItem";
-import GateStatus, { gateStatusType } from "@/components/gateStatus/gateStatus";
-import { Button, Card, CardContent, Typography } from "@mui/material";
-import React from "react";
-import { AiOutlineReload, AiOutlineCheck } from "react-icons/ai";
 
-type parameterSettingsType = {
-  furnaces: ParameterFurnaceItemType[];
-  gatesStatus: gateStatusType[];
-};
-
-const dummyParameterSettings: parameterSettingsType = {
-  furnaces: [
-    {
-      id: 1,
-      name: "کوره ۱",
-      ironUsage: {
-        withoutSeed: 50,
-        withSeed: 40,
-      },
-      tanks: [
-        {
-          material: "آهن اسفنجی",
-          name: "مخزن ۹",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-        {
-          material: "آهن اسفنجی",
-          name: "مخزن ۱۰",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-        {
-          material: "لایم",
-          name: "مخزن ۵",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-        {
-          material: "دولومیت",
-          name: "مخزن ۷",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-        {
-          material: "پین کمکی",
-          name: "مخزن ۱۰",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "کوره ۲",
-      ironUsage: {
-        withoutSeed: 50,
-        withSeed: 40,
-      },
-      tanks: [
-        {
-          material: "آهن اسفنجی",
-          name: "مخزن ۹",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-        {
-          material: "آهن اسفنجی",
-          name: "مخزن ۱۰",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-        {
-          material: "لایم",
-          name: "مخزن ۵",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-        {
-          material: "دولومیت",
-          name: "مخزن ۷",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-        {
-          material: "پین کمکی",
-          name: "مخزن ۱۰",
-          amount: 40,
-          inActiveDuration: 0,
-        },
-      ],
-    },
-  ],
-  gatesStatus: [
-    {
-      gate: {
-        id: undefined,
-        label: undefined,
-      },
-      time: new Date(new Date().setMinutes(new Date().getMinutes() - 4)),
-      duration: 4,
-    },
-    {
-      gate: {
-        id: undefined,
-        label: undefined,
-      },
-      time: new Date(new Date().setMinutes(new Date().getMinutes() - 8)),
-      duration: 4,
-    },
-    {
-      gate: {
-        id: undefined,
-        label: undefined,
-      },
-      time: new Date(new Date().setMinutes(new Date().getMinutes() - 12)),
-      duration: 4,
-    },
-  ],
-};
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  Typography,
+  Button,
+  IconButton,
+  useRadioGroup,
+  Switch,
+} from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { AiFillPlusCircle } from "react-icons/ai";
+import { GrEdit } from "react-icons/gr";
+import { useRouter } from "next/navigation";
+import { PatchFurnaceSetting } from "@/app/apiManager/FurnaceSetting";
+import { toast } from "react-hot-toast";
+import { FormatToPersianDate } from "@/hooks/useFormatToPersianDate";
+import { GetParameterSettingList } from "@/app/apiManager/ParameterSetting";
 
 function ParameterSettingsPage() {
+  const router = useRouter();
+  const [tableRows, setTableRows] = useState<any[]>([]);
+  const {
+    data,
+    isLoading: isGetLoading,
+    isError,
+    refetch,
+  } = GetParameterSettingList();
+  const { mutate, isLoading: isUpdateLoading } = PatchFurnaceSetting();
+  const columns: GridColDef[] = useMemo(
+    () => [
+      {
+        field: "name",
+        headerName: "نام",
+        flex: 1,
+      },
+      {
+        field: "username",
+        headerName: "تاریخ ایجاد",
+        renderCell: (params) => {
+          return (
+            <Typography variant="caption">
+              {FormatToPersianDate(
+                params.row.created_at,
+                "در تاریخ jYYYY/jM/jD ساعت HH:mm"
+              )}
+            </Typography>
+          );
+        },
+        flex: 1,
+      },
+      {
+        field: "userType",
+        headerName: "وضعیت",
+        flex: 1,
+        renderCell: (params) => {
+          return (
+            <Switch
+              checked={params.row.is_active}
+              onClick={() => {
+                mutate({
+                  id: params.row.id,
+                  is_active: !params.row.is_active,
+                  name: params.row.name,
+                });
+                refetch();
+              }}
+            />
+          );
+        },
+      },
+      {
+        field: "actions",
+        headerName: "عملیات",
+        width: 200,
+        renderCell: (params) => (
+          <IconButton
+            className="text-center"
+            color="primary"
+            onClick={() => {
+              router.push(`/manage/parameter-settings/${params.row.id}`);
+            }}
+          >
+            <GrEdit size="15px" />
+          </IconButton>
+        ),
+      },
+    ],
+    [router]
+  );
+
+  useEffect(() => {
+    if (data?.result) {
+      setTableRows(data?.result);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error("در دریافت اطلاعات مشکلی پیش آمده است.");
+    }
+  }, [isError]);
+
   return (
     <div className="p-2">
-      <div className="flex flex-row">
+      <div className="flex flex-row mb-2">
         <Typography variant="subtitle1" className="flex-1">
-          تنظیم پارامتر
+          مدیریت تنظیمات پارامتر
         </Typography>
-
-        <Button
-          className="mx-2"
-          color="primary"
-          variant="contained"
-          startIcon={<AiOutlineReload />}
-        >
-          دریافت مجدد اطلاعات
-        </Button>
         <Button
           color="success"
           variant="contained"
-          startIcon={<AiOutlineCheck />}
+          startIcon={<AiFillPlusCircle />}
+          onClick={() => router.push("/manage/parameter-settings/create")}
         >
-          ثبت و اجرا
+          ایجاد تنظیمات جدید
         </Button>
       </div>
-      <div className="flex flex-row pt-2 gap-2">
-        <div className="flex-1 gap-4 flex flex-col">
-          {dummyParameterSettings.furnaces.map((ParameterFurnace) => {
-            return (
-              <ParameterFurnaceItem
-                data={ParameterFurnace}
-                key={ParameterFurnace.name}
-              />
-            );
-          })}
-        </div>
-        <Card
-          className="w-[500px] h-[250px] text-center rounded-lg"
-          elevation={4}
-        >
-          <CardContent className="flex flex-col gap-3">
-            <Typography variant="subtitle2">
-              وضعیت دریچه ها در ۱۲ دقیقه قبل
-            </Typography>
-            {dummyParameterSettings.gatesStatus.map((gateStatus, index) => {
-              return (
-                <GateStatus
-                  key={`gate status ${index}`}
-                  duration={gateStatus.duration}
-                  gate={gateStatus.gate}
-                  time={gateStatus.time}
-                />
-              );
-            })}
-          </CardContent>
-        </Card>
+      <div className="h-[400px] w-full">
+        <DataGrid
+          loading={isGetLoading || isUpdateLoading}
+          autoHeight
+          rowSelection={false}
+          rows={tableRows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          pageSizeOptions={[5]}
+          disableColumnMenu
+        />
       </div>
     </div>
   );

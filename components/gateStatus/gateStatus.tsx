@@ -8,9 +8,9 @@ export type gateStatusType = {
   gate: {
     id?: number | string;
     label?: string;
-  };
-  time: Date;
-  duration: number;
+  } | null;
+  time: string;
+  duration: string;
 };
 
 const gates: autoCompleteOption[] = [
@@ -28,7 +28,13 @@ const gates: autoCompleteOption[] = [
   },
 ];
 
-function GateStatus({ duration, time, gate }: gateStatusType) {
+function GateStatus({
+  data,
+  onChangeData,
+}: {
+  data: gateStatusType;
+  onChangeData: (data: gateStatusType) => void;
+}) {
   return (
     <div className="flex flex-row gap-1 pt-4">
       <Autocomplete
@@ -36,16 +42,40 @@ function GateStatus({ duration, time, gate }: gateStatusType) {
         id="combo-box-demo"
         options={gates}
         className="flex-1"
+        value={data.gate}
+        onChange={(e, newVal) =>
+          onChangeData({
+            ...data,
+            gate: newVal ? newVal : null,
+          })
+        }
         renderInput={(params) => (
           <TextField {...params} label="دریچه" size="small" />
         )}
       />
-      <TextField label="مدت (دقیقه)" size="small" className="w-[120px]" />
+      <TextField
+        label="مدت (دقیقه)"
+        size="small"
+        className="w-[120px]"
+        value={data.duration}
+        onChange={(e) => {
+          onChangeData({
+            ...data,
+            duration: e.target.value,
+          });
+        }}
+      />
       <TextField
         label="ساعت"
         size="small"
         className="w-[70px]"
-        value={`${time.getHours()}:${time.getMinutes()}`}
+        value={data.time}
+        onChange={(e) => {
+          onChangeData({
+            ...data,
+            time: e.target.value,
+          });
+        }}
       />
     </div>
   );
