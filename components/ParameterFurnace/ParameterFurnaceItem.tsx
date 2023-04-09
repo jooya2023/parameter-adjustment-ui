@@ -11,8 +11,8 @@ import React from "react";
 type ParameterFurnaceItemTank = {
   name: string;
   material: string;
-  amount: number;
-  inActiveDuration: number;
+  amount: string;
+  inActiveDuration: string;
 };
 
 export type ParameterFurnaceItemType = {
@@ -20,12 +20,26 @@ export type ParameterFurnaceItemType = {
   name: string;
   tanks: ParameterFurnaceItemTank[];
   ironUsage: {
-    withSeed: number;
-    withoutSeed: number;
+    withSeed: string;
+    withoutSeed: string;
   };
 };
 
-function ParameterFurnaceItem({ data }: { data: ParameterFurnaceItemType }) {
+function ParameterFurnaceItem({
+  data,
+  onChangeData,
+}: {
+  data: ParameterFurnaceItemType;
+  onChangeData: (value: ParameterFurnaceItemType) => void;
+}) {
+  function handleUpdateTanks(index: number, newData: ParameterFurnaceItemTank) {
+    const temp = data.tanks;
+    temp[index] = newData;
+    onChangeData({
+      ...data,
+      tanks: temp,
+    });
+  }
   return (
     <Card className="flex-1 rounded-lg" elevation={4}>
       <CardContent>
@@ -37,15 +51,35 @@ function ParameterFurnaceItem({ data }: { data: ParameterFurnaceItemType }) {
           {data.name}
         </Typography>
         <div className="flex">
-          <div className="flex flex-1 items-center gap-2 flex-col">
+          <div className="flex flex-1 items-center gap-3 flex-col">
             <Typography className="text-center" variant="subtitle1">
               وزن پین ها
             </Typography>
-            {data.tanks.map((tank) => {
+            {data.tanks.map((tank, index) => {
               return (
-                <div key={tank.name}>
-                  <TextField label="آهن اسفنجی (مخزن ۹)" size="small" />
-                  <TextField label="میزان دقیقه غیر فعال" size="small" />
+                <div key={tank.name} className="flex gap-2">
+                  <TextField
+                    label={`${tank.name} (${tank.material})`}
+                    size="small"
+                    value={tank.amount}
+                    onChange={(e) =>
+                      handleUpdateTanks(index, {
+                        ...tank,
+                        amount: e.target.value,
+                      })
+                    }
+                  />
+                  <TextField
+                    label="میزان دقیقه غیر فعال"
+                    size="small"
+                    value={tank.inActiveDuration}
+                    onChange={(e) =>
+                      handleUpdateTanks(index, {
+                        ...tank,
+                        inActiveDuration: e.target.value,
+                      })
+                    }
+                  />
                 </div>
               );
             })}
@@ -55,8 +89,34 @@ function ParameterFurnaceItem({ data }: { data: ParameterFurnaceItemType }) {
             <Typography className="text-center" variant="subtitle1">
               میزان مصرف آهن
             </Typography>
-            <TextField label="بدون سید زنی" size="small" />
-            <TextField label="با سید زنی" size="small" />
+            <TextField
+              label="بدون سید زنی"
+              size="small"
+              value={data.ironUsage.withoutSeed}
+              onChange={(e) =>
+                onChangeData({
+                  ...data,
+                  ironUsage: {
+                    withoutSeed: e.target.value,
+                    withSeed: data.ironUsage.withSeed,
+                  },
+                })
+              }
+            />
+            <TextField
+              label="با سید زنی"
+              size="small"
+              value={data.ironUsage.withSeed}
+              onChange={(e) =>
+                onChangeData({
+                  ...data,
+                  ironUsage: {
+                    withoutSeed: data.ironUsage.withSeed,
+                    withSeed: e.target.value,
+                  },
+                })
+              }
+            />
           </div>
         </div>
       </CardContent>
