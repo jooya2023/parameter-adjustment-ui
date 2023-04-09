@@ -41,6 +41,10 @@ const options: ApexCharts.ApexOptions = {
   stroke: {
     curve: "straight",
   },
+  title: {
+    text: "نمودار مصرف دولومیت",
+    align: "center",
+  },
   grid: {
     row: {
       colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
@@ -58,7 +62,7 @@ function DashboardDolomiteUsageChart() {
         options={options}
         series={series}
         type="line"
-        height="650px"
+        height="200px"
       />
     </div>
   );

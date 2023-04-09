@@ -46,20 +46,14 @@ function DashboardPage() {
         variant="fullWidth"
       >
         <Tab label="نمودار زمانبندی شارژ" />
-        <Tab label="نمودار مصرف دولومیت" />
-        <Tab label="نمودار مصرف آهک" />
-        <Tab label="نمودار مصرف آهن" />
+        <Tab label="نمودار های مصرف" />
       </Tabs>
       <TabPanel value={value} index={0}>
         <DashboardPinTimeChart />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <DashboardDolomiteUsageChart />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
         <DashboardDolomiteUsageChart />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
         <DashboardDolomiteUsageChart />
       </TabPanel>
     </div>
