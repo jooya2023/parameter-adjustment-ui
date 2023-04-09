@@ -1,37 +1,89 @@
 "use client";
 
-import { autoCompleteOption } from "@/components/Types";
+import { GetUserById, PatchUser } from "@/app/apiManager/Users";
+import { autoCompleteOption, pagesLayoutData } from "@/components/Types";
 import {
   Autocomplete,
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Divider,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { AiFillPlusCircle } from "react-icons/ai";
 
 const userTypes: autoCompleteOption[] = [
+  { id: -1, label: "نامشخص" },
   {
     id: 1,
-    label: "سوپروایزر",
+    label: "SysAdmin",
   },
-  {
-    id: 2,
-    label: "اپراتور",
-  },
+  { id: 2, label: "Supervisor" },
   {
     id: 3,
-    label: "مانیتورینگ",
+    label: "Operation",
+  },
+  {
+    id: 4,
+    label: "Monitoring",
   },
 ];
-function EditUserPage() {
-  const [firstAndLastName, setFirstAndLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [UserType, setUserType] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+function EditUserPage({ params, searchParams }: pagesLayoutData) {
+  const router = useRouter();
+
+  const { data, isLoading: getLoading } = GetUserById(`${params.id}`);
+  const {
+    mutate,
+    isLoading: patchLoading,
+    isSuccess: isPatchSuccess,
+  } = PatchUser();
+
+  const [firstName, setFirstName] = useState(" ");
+  const [lastName, setLastName] = useState(" ");
+  const [username, setUsername] = useState(" ");
+  const [userType, setUserType] = useState<autoCompleteOption>({
+    id: -1,
+    label: "نامشخص",
+  });
+  const [newPassword, setNewPassword] = useState(" ");
+
+  useEffect(() => {
+    setFirstName(data?.result.first_name || "");
+    setLastName(data?.result.last_name || "");
+    setUsername(data?.result.username || "");
+    if (data?.result.user_type) {
+      setUserType({
+        id: data?.result.user_type?.id,
+        label: data?.result.user_type?.name,
+      });
+    }
+  }, [data]);
+
+  function handleUpdate() {
+    mutate({
+      id: params.id,
+      first_name: firstName,
+      last_name: lastName,
+      username,
+      user_type: { id: userType.id || -1, name: userType.label || "نامشخص" },
+    });
+  }
+
+  useEffect(() => {
+    if (isPatchSuccess) {
+      router.push("/manage/users");
+      toast.success("عملیات با موفقیت انجام شد.");
+    }
+  }, [isPatchSuccess, router]);
+
+  if (getLoading) {
+    return <CircularProgress />;
+  }
   return (
     <div className="p-2">
       <div className="flex flex-row mb-2">
@@ -43,18 +95,46 @@ function EditUserPage() {
         <Card className="w-[500px]" elevation={4}>
           <CardContent className="gap-4 flex flex-col">
             <Typography>ویرایش کاربر</Typography>
-            <TextField label="نام و نام خانوادگی" size="small" fullWidth />
-            <TextField label="نام کاربری" size="small" fullWidth />
+            <TextField
+              label="نام"
+              size="small"
+              fullWidth
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <TextField
+              label="نام خانوادگی"
+              size="small"
+              fullWidth
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            <TextField
+              label="نام کاربری"
+              size="small"
+              fullWidth
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <Autocomplete
               disablePortal
               id="combo-box-demo"
               options={userTypes}
               className="flex-1"
+              onChange={(e, newVal) => setUserType(newVal || {})}
+              defaultValue={userType}
+              value={userType}
               renderInput={(params) => (
                 <TextField {...params} label="نوع کاربری" size="small" />
               )}
             />
-            <Button variant="contained">ثبت تغییرات</Button>
+            <Button
+              variant="contained"
+              disabled={patchLoading}
+              onClick={handleUpdate}
+            >
+              ثبت تغییرات
+            </Button>
 
             <Divider />
             <Typography>ویرایش کلمه عبور</Typography>

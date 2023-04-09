@@ -4,7 +4,7 @@ import { DjangoResponseByIdBody, DjangoResponseListBody } from "./Types";
 import { BaseSettingFurnaceItemType } from "@/components/BaseSettingFurnace/BaseSettingFurnaceItem";
 import { BaseSettingChargeRateType } from "@/components/BaseSettingFurnace/BaseSettingChargeRate";
 
-type GetFurnaceSettingListItem = {
+type FurnaceSettingItem = {
   id?: number;
   name: string;
   is_active: boolean;
@@ -16,7 +16,7 @@ type GetFurnaceSettingListItem = {
 
 export function GetFurnaceSettingList() {
   async function fetchData(): Promise<
-    DjangoResponseListBody<GetFurnaceSettingListItem>
+    DjangoResponseListBody<FurnaceSettingItem>
   > {
     const { data } = await axiosClient.get("/furnace-setting");
     return data;
@@ -26,7 +26,7 @@ export function GetFurnaceSettingList() {
 
 export function GetFurnaceSettingById(itemId: string) {
   async function fetchData(): Promise<
-    DjangoResponseByIdBody<GetFurnaceSettingListItem>
+    DjangoResponseByIdBody<FurnaceSettingItem>
   > {
     const { data } = await axiosClient.get(`/furnace-setting/${itemId}`);
     return data;
@@ -35,18 +35,18 @@ export function GetFurnaceSettingById(itemId: string) {
 }
 
 export function CreateFurnaceSetting() {
-  async function createFurnaceSetting(newData: GetFurnaceSettingListItem) {
+  async function createFurnaceSetting(newData: FurnaceSettingItem) {
     const { data } = await axiosClient.post("/furnace-setting/", newData);
     return data;
   }
 
-  return useMutation((changedData: GetFurnaceSettingListItem) =>
+  return useMutation((changedData: FurnaceSettingItem) =>
     createFurnaceSetting(changedData)
   );
 }
 
 export function PatchFurnaceSetting() {
-  async function updateFurnaceSetting(updatedData: GetFurnaceSettingListItem) {
+  async function updateFurnaceSetting(updatedData: FurnaceSettingItem) {
     const { data } = await axiosClient.patch(
       `/furnace-setting/${updatedData.id}/`,
       updatedData
@@ -54,7 +54,7 @@ export function PatchFurnaceSetting() {
     return data;
   }
 
-  return useMutation((changedData: GetFurnaceSettingListItem) =>
+  return useMutation((changedData: FurnaceSettingItem) =>
     updateFurnaceSetting(changedData)
   );
 }

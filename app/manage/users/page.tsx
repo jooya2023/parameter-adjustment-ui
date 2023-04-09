@@ -1,29 +1,29 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { Typography, Button, IconButton, useRadioGroup } from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
+import { Typography, Button, IconButton, Chip } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { GrEdit } from "react-icons/gr";
 import { useRouter } from "next/navigation";
-
-const rows = [
-  { id: 1, name: "Snow", username: "Jon", userType: 35 },
-  { id: 2, name: "Lannister", username: "Cersei", userType: 42 },
-  { id: 3, name: "Lannister", username: "Jaime", userType: 45 },
-  { id: 4, name: "Stark", username: "Arya", userType: 16 },
-  { id: 5, name: "Targaryen", username: "Daenerys", userType: null },
-  { id: 6, name: "Melisandre", username: null, userType: 150 },
-];
+import { GetUsersList } from "@/app/apiManager/Users";
+import toast from "react-hot-toast";
 
 function UsersPage() {
   const router = useRouter();
+  const { data, isLoading: isGetLoading, isError } = GetUsersList();
+  const [tableRows, setTableRows] = useState<any[]>([]);
   const columns: GridColDef[] = useMemo(
     () => [
       {
-        field: "name",
+        field: "first_name",
         headerName: "نام و نام خانوادگی",
         flex: 1,
+        renderCell: (params) => (
+          <Typography variant="body2">
+            {`${params.row.first_name} ${params.row.last_name}`}
+          </Typography>
+        ),
       },
       {
         field: "username",
@@ -34,6 +34,12 @@ function UsersPage() {
         field: "userType",
         headerName: "نوع کاربر",
         flex: 1,
+        renderCell: (params) => (
+          <Chip
+            label={params.row.user_type?.name || "نامشخص"}
+            color="secondary"
+          />
+        ),
       },
       {
         field: "actions",
@@ -52,6 +58,17 @@ function UsersPage() {
     ],
     [router]
   );
+  useEffect(() => {
+    if (data?.result) {
+      setTableRows(data?.result);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error("در دریافت اطلاعات مشکلی پیش آمده است.");
+    }
+  }, [isError]);
   return (
     <div className="p-2">
       <div className="flex flex-row mb-2">
@@ -69,9 +86,10 @@ function UsersPage() {
       </div>
       <div className="h-[400px] w-full">
         <DataGrid
+          loading={isGetLoading}
           autoHeight
           rowSelection={false}
-          rows={rows}
+          rows={tableRows}
           columns={columns}
           initialState={{
             pagination: {

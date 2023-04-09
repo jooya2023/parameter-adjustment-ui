@@ -2,7 +2,7 @@
 
 import {
   GetFurnaceSettingById,
-  UpdateFurnaceSetting,
+  PatchFurnaceSetting,
 } from "@/app/apiManager/FurnaceSetting";
 import BaseSettingFurnaceItem, {
   BaseSettingFurnaceItemType,
@@ -21,6 +21,7 @@ import BaseSettingChargeRate, {
   BaseSettingChargeRateType,
 } from "@/components/BaseSettingFurnace/BaseSettingChargeRate";
 import { useRouter } from "next/navigation";
+import { pagesLayoutData } from "@/components/Types";
 
 type BaseSettingsType = {
   furnaces: BaseSettingFurnaceItemType[];
@@ -135,13 +136,7 @@ const BaseSetting: BaseSettingsType = {
   },
 };
 
-function BaseSettingsPage({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+function BaseSettingsPage({ params, searchParams }: pagesLayoutData) {
   const { data, isLoading } = GetFurnaceSettingById(`${params.id}`);
   const [name, setName] = useState("");
   const [furnaces, setFurnaces] = useState<BaseSettingFurnaceItemType[]>([
@@ -259,7 +254,7 @@ function BaseSettingsPage({
     setFurnaces(temp);
   }
 
-  const { mutate } = UpdateFurnaceSetting(params.id);
+  const { mutate } = PatchFurnaceSetting();
   function handleUpdate() {
     mutate({
       is_active: data?.result.is_active || false,
