@@ -13,10 +13,12 @@ import { toast } from "react-hot-toast";
  */
 function ApplicationBar() {
   const router = useRouter();
-  const { data, isLoading: MyLoading, isError } = GetMy();
+  const { data: myData, isLoading: MyLoading, isError } = GetMy();
+  const { mutate, isSuccess } = LogOutUser();
+
   const [userType, setUserType] = useState<
     | {
-        id: number;
+        id: number | string;
         name: string;
       }
     | null
@@ -24,15 +26,10 @@ function ApplicationBar() {
   >(null);
 
   useEffect(() => {
-    if (data) {
-      setUserType(data.result.user_type);
+    if (myData) {
+      setUserType(myData.result.user_type);
     }
-  }, [data]);
-  const { mutate, isSuccess } = LogOutUser();
-
-  function handleLogout() {
-    mutate();
-  }
+  }, [myData]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -43,15 +40,39 @@ function ApplicationBar() {
     }
   }, [isSuccess]);
 
-  function checkPermission(permissionId: number) {
-    if (!userType) {
+  function handleLogout() {
+    mutate();
+  }
+
+  function checkPermission(
+    permissionId: "dashboard" | "parameter" | "base" | "users"
+  ) {
+    if (userType === undefined || userType === null) {
       return true;
-    } else {
-      if (userType.id > permissionId) {
+    }
+
+    switch (userType?.id) {
+      // SysAdmin
+      case 1:
         return true;
-      } else {
+      // Supervisor
+      case 2:
+        return true;
+      // Operation
+      case 3:
+        if (permissionId === "dashboard" || permissionId === "parameter") {
+          return true;
+        }
         return false;
-      }
+      // Monitoring
+      case 4:
+        if (permissionId === "dashboard") {
+          return true;
+        }
+        return false;
+
+      default:
+        break;
     }
   }
 
@@ -73,13 +94,15 @@ function ApplicationBar() {
           توسعه فولادآلیاژی ایرانیان
         </Typography>
         <div className="flex-1 text-center">
-          <Button
-            color="primary"
-            onClick={() => router.push("/manage/dashboard")}
-          >
-            خانه
-          </Button>
-          {checkPermission(1) && (
+          {checkPermission("dashboard") && (
+            <Button
+              color="primary"
+              onClick={() => router.push("/manage/dashboard")}
+            >
+              خانه
+            </Button>
+          )}
+          {checkPermission("parameter") && (
             <Button
               color="primary"
               onClick={() => router.push("/manage/parameter-settings")}
@@ -87,15 +110,22 @@ function ApplicationBar() {
               تنظیم پارامتر
             </Button>
           )}
-          <Button
-            color="primary"
-            onClick={() => router.push("/manage/base-settings")}
-          >
-            تنظیمات پایه
-          </Button>
-          <Button color="primary" onClick={() => router.push("/manage/users")}>
-            کاربران
-          </Button>
+          {checkPermission("base") && (
+            <Button
+              color="primary"
+              onClick={() => router.push("/manage/base-settings")}
+            >
+              تنظیمات پایه
+            </Button>
+          )}
+          {checkPermission("users") && (
+            <Button
+              color="primary"
+              onClick={() => router.push("/manage/users")}
+            >
+              کاربران
+            </Button>
+          )}
         </div>
 
         <IconButton color="error" onClick={handleLogout}>
