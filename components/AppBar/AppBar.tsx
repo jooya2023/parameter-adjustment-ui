@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 import { IoMdLogOut } from "react-icons/io";
-import { GetMy, UserItem } from "@/app/apiManager/Users";
+import { GetMy, LogOutUser, UserItem } from "@/app/apiManager/Users";
+import { toast } from "react-hot-toast";
 
 /**
  * ApplicationBar that shows on top of every page of manage section and use to navigate between pages.
@@ -27,10 +28,20 @@ function ApplicationBar() {
       setUserType(data.result.user_type);
     }
   }, [data]);
+  const { mutate, isSuccess } = LogOutUser();
 
   function handleLogout() {
-    router.push("/users/login");
+    mutate();
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      localStorage.removeItem("access-token");
+      localStorage.removeItem("refresh-token");
+      toast.success("با موفقیت از سیستم خارج شدید.");
+      router.push("/auth/login");
+    }
+  }, [isSuccess]);
 
   function checkPermission(permissionId: number) {
     if (!userType) {

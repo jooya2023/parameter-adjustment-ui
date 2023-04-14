@@ -77,3 +77,14 @@ export function ChangePassword() {
 
   return useMutation((changedData: UserItem) => changePassword(changedData));
 }
+
+export function LogOutUser() {
+  async function logOutUser() {
+    const { data } = await axiosClient.post("/users/logout/", {
+      refresh: localStorage.getItem("refresh-token"),
+    });
+    return data;
+  }
+
+  return useMutation(() => logOutUser());
+}
