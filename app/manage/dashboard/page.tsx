@@ -1,9 +1,12 @@
 "use client";
 
 import { Tabs, Tab, Box, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardPinTimeChart from "@/components/Charts/DashboardPinTimeChart/DashboardPinTimeChart";
-import DashboardDolomiteUsageChart from "@/components/Charts/DashboardDolomiteUsageChart/DashboardDolomiteUsageChart";
+import DashboardUsageChart from "@/components/Charts/DashboardUsageChart/DashboardUsageChart";
+import { CalculateParameters } from "@/app/apiManager/ParameterSetting";
+import { FormatToPersianDate } from "@/hooks/useFormatToPersianDate";
+import { toast } from "react-hot-toast";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -33,10 +36,171 @@ function TabPanel(props: TabPanelProps) {
 
 function DashboardPage() {
   const [value, setValue] = React.useState(0);
+  const { data, isLoading } = CalculateParameters();
+
+  const [usageTimes, setUsageTimes] = useState<any[]>([]);
+  const [dolomiteSeries, setDolomiteSeries] = useState<
+    ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
+  >([]);
+  const [limeSeries, setLimeSeries] = useState<
+    ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
+  >([]);
+  const [ironSeries, setIronSeries] = useState<
+    ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
+  >([]);
+
+  const [planChartData, setPlanChartData] = useState<any[]>([]);
+
+  const [notifications, setNotifications] = useState<
+    {
+      date: Date;
+      message: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (data?.result && data?.result.length > 0) {
+      let notificationTemp: {
+        date: Date;
+        message: string;
+      }[] = [];
+
+      const times = data?.result[0].data.opt_w_in_time.time.map((item) => {
+        return FormatToPersianDate(item, "hh:mm");
+      });
+      setUsageTimes(times);
+
+      const dolomiteData = data?.result[0].data.opt_w_in_time.data.dolomite.map(
+        (item) => {
+          return {
+            name: item.name,
+            data: item.data,
+          };
+        }
+      );
+      setDolomiteSeries(dolomiteData);
+      const limeData = data?.result[0].data.opt_w_in_time.data.lime.map(
+        (item) => {
+          return {
+            name: item.name,
+            data: item.data,
+          };
+        }
+      );
+      setLimeSeries(limeData);
+      const ironData = data?.result[0].data.opt_w_in_time.data.iron.map(
+        (item) => {
+          return {
+            name: item.name,
+            data: item.data,
+          };
+        }
+      );
+      setIronSeries(ironData);
+
+      let aaa: {
+        name: string;
+        data: {
+          x: string;
+          y: [number, number];
+        }[];
+      }[] = [];
+
+      data?.result[0].data.opt_actions_output.forEach((item) => {
+        if (item.furnace !== "") {
+          let insertFlag = true;
+          aaa.forEach((subItem, index) => {
+            if (subItem.name === item.furnace) {
+              notificationTemp.push({
+                date: new Date(new Date(item.start_time).getTime() - 60000),
+                message: `تغییر به ${item.furnace} در ۱ دقیقه آینده`,
+              });
+              aaa[index].data.push({
+                x: item.furnace,
+                y: [
+                  new Date(item.start_time).getTime(),
+                  new Date(item.end_time).getTime(),
+                ],
+              });
+              insertFlag = false;
+            }
+          });
+          if (insertFlag) {
+            notificationTemp.push({
+              date: new Date(new Date(item.start_time).getTime() - 60000),
+              message: `تغییر به ${item.furnace} در ۱ دقیقه آینده`,
+            });
+            aaa.push({
+              name: item.furnace,
+              data: [
+                {
+                  x: item.furnace,
+                  y: [
+                    new Date(item.start_time).getTime(),
+                    new Date(item.end_time).getTime(),
+                  ],
+                },
+              ],
+            });
+          }
+        }
+      });
+      setPlanChartData(aaa);
+
+      data?.result[0].data.opt_shooting_list.forEach((item) => {
+        notificationTemp.push({
+          date: new Date(new Date(item.start_time).getTime() - 60000),
+          message: `از یک دقیقه آینده به مدت ${item.duration} دقیقه شوتینگ باید رخ بدهد`,
+        });
+        item.data.forEach((subItem) => {
+          notifications.push({
+            date: new Date(
+              new Date(subItem.notification_time).getTime() - 60000
+            ),
+            message: `تغییر  ${subItem.furnace_1} به ${subItem.furnace_2}`,
+          });
+          console.log(subItem);
+        });
+      });
+      setNotifications(notificationTemp);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const checkCurrentDateInArray = () => {
+      const now = new Date(); // get the current date
+
+      notifications.forEach((date) => {
+        if (
+          Math.floor(date.date.getTime() / 1000) ===
+          Math.floor(now.getTime() / 1000)
+        ) {
+          toast(date.message, {
+            icon: "⚠️",
+            position: "bottom-center",
+            duration: 10000,
+            className: "w-[900px]",
+            style: {
+              borderRadius: "10px",
+              background: "#333",
+              color: "#fff",
+            },
+          });
+        }
+      });
+    };
+
+    const timeoutId = setInterval(checkCurrentDateInArray, 1000); // set a timeout of 1 second
+
+    return () => clearTimeout(timeoutId); // clear the timeout on unmount
+  }, [notifications]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+  if (isLoading) {
+    return <Typography>در حال دریافت اطلاعات...</Typography>;
+  }
   return (
     <div>
       <Tabs
@@ -49,12 +213,25 @@ function DashboardPage() {
         <Tab label="نمودار های مصرف" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <DashboardPinTimeChart />
+        <DashboardPinTimeChart series={planChartData} />
+        {/* series={planChartData} */}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <DashboardDolomiteUsageChart />
-        <DashboardDolomiteUsageChart />
-        <DashboardDolomiteUsageChart />
+        <DashboardUsageChart
+          series={dolomiteSeries}
+          title="نمودار مصرف دولومیت"
+          categories={usageTimes}
+        />
+        <DashboardUsageChart
+          series={limeSeries}
+          title="نمودار مصرف اهک"
+          categories={usageTimes}
+        />
+        <DashboardUsageChart
+          series={ironSeries}
+          title="نمودار مصرف آهن"
+          categories={usageTimes}
+        />
       </TabPanel>
     </div>
   );

@@ -5,7 +5,7 @@ import { BaseSettingFurnaceItemType } from "@/components/BaseSettingFurnace/Base
 import { BaseSettingChargeRateType } from "@/components/BaseSettingFurnace/BaseSettingChargeRate";
 
 type FurnaceSettingItem = {
-  id?: number;
+  id?: number | string;
   name: string;
   is_active: boolean;
   data?: {
@@ -56,5 +56,34 @@ export function PatchFurnaceSetting() {
 
   return useMutation((changedData: FurnaceSettingItem) =>
     updateFurnaceSetting(changedData)
+  );
+}
+
+export function UploadFileInFurnaceSetting() {
+  async function uploadFileInFurnaceSetting(
+    id: number | string,
+    file: File | null
+  ) {
+    const formData = new FormData();
+    if (file) {
+      formData.append("file", file);
+    }
+
+    const { data } = await axiosClient.patch(
+      `/furnace-setting/file/${id}/`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return data;
+  }
+
+  return useMutation(
+    (changedData: { id: string | number; file: File | null }) =>
+      uploadFileInFurnaceSetting(changedData.id, changedData.file)
   );
 }

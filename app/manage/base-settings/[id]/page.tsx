@@ -3,6 +3,7 @@
 import {
   GetFurnaceSettingById,
   PatchFurnaceSetting,
+  UploadFileInFurnaceSetting,
 } from "@/app/apiManager/FurnaceSetting";
 import BaseSettingFurnaceItem, {
   BaseSettingFurnaceItemType,
@@ -22,6 +23,7 @@ import BaseSettingChargeRate, {
 } from "@/components/BaseSettingFurnace/BaseSettingChargeRate";
 import { useRouter } from "next/navigation";
 import { pagesLayoutData } from "@/components/Types";
+import { toast } from "react-hot-toast";
 
 type BaseSettingsType = {
   furnaces: BaseSettingFurnaceItemType[];
@@ -137,7 +139,7 @@ const BaseSetting: BaseSettingsType = {
 };
 
 function BaseSettingsPage({ params, searchParams }: pagesLayoutData) {
-  const { data, isLoading } = GetFurnaceSettingById(`${params.id}`);
+  const { data, isLoading, refetch } = GetFurnaceSettingById(`${params.id}`);
   const [name, setName] = useState("");
   const [furnaces, setFurnaces] = useState<BaseSettingFurnaceItemType[]>([
     {
@@ -255,8 +257,14 @@ function BaseSettingsPage({ params, searchParams }: pagesLayoutData) {
   }
 
   const { mutate } = PatchFurnaceSetting();
+  const {
+    mutate: mutateUpload,
+    isLoading: uploadLoading,
+    isSuccess: uploadSuccess,
+  } = UploadFileInFurnaceSetting();
   function handleUpdate() {
     mutate({
+      id: params.id,
       is_active: data?.result.is_active || false,
       name: name,
       data: {
@@ -266,6 +274,20 @@ function BaseSettingsPage({ params, searchParams }: pagesLayoutData) {
     });
     router.push("/manage/base-settings");
   }
+
+  function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    mutateUpload({
+      id: params.id,
+      file: e.target?.files ? e.target?.files[0] : null,
+    });
+    refetch();
+  }
+
+  useEffect(() => {
+    if (uploadSuccess) {
+      toast.success("فایل با موفقیت بارگذاری شد.");
+    }
+  }, [uploadSuccess]);
 
   useEffect(() => {
     setName(data?.result.name || "");
@@ -287,11 +309,16 @@ function BaseSettingsPage({ params, searchParams }: pagesLayoutData) {
           تنظیمات پایه
         </Typography>
 
+        <Button variant="contained" component="label" disabled={uploadLoading}>
+          آپلود اکسل
+          <input hidden type="file" onChange={(e) => handleUpload(e)} />
+        </Button>
         <Button
           color="success"
           variant="contained"
           startIcon={<AiOutlineCheck />}
           onClick={() => handleUpdate()}
+          className="mr-2"
         >
           ثبت
         </Button>

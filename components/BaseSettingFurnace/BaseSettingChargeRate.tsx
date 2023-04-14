@@ -8,9 +8,9 @@ import {
 import React, { useState } from "react";
 
 export type BaseSettingChargeRateType = {
-  iron: string;
-  lime: string;
-  dolomite: string;
+  iron: number;
+  lime: number;
+  dolomite: number;
 };
 
 function BaseSettingChargeRate({
@@ -25,13 +25,13 @@ function BaseSettingChargeRate({
   function handleChangeData(value: string, type: "IRON" | "LIME" | "DOLOMITE") {
     switch (type) {
       case "IRON":
-        onChangeData({ iron: value, lime, dolomite });
+        onChangeData({ iron: parseFloat(value), lime, dolomite });
         break;
       case "LIME":
-        onChangeData({ iron, lime: value, dolomite });
+        onChangeData({ iron, lime: parseFloat(value), dolomite });
         break;
       case "DOLOMITE":
-        onChangeData({ iron, lime, dolomite: value });
+        onChangeData({ iron, lime, dolomite: parseFloat(value) });
         break;
     }
   }
@@ -49,6 +49,7 @@ function BaseSettingChargeRate({
             size="small"
             fullWidth
             value={iron}
+            type="number"
             onChange={(e) => handleChangeData(e.target.value, "IRON")}
           />
           <TextField
@@ -56,6 +57,7 @@ function BaseSettingChargeRate({
             size="small"
             fullWidth
             value={lime}
+            type="number"
             onChange={(e) => handleChangeData(e.target.value, "LIME")}
           />
           <TextField
@@ -63,6 +65,7 @@ function BaseSettingChargeRate({
             size="small"
             fullWidth
             value={dolomite}
+            type="number"
             onChange={(e) => handleChangeData(e.target.value, "DOLOMITE")}
           />
         </div>

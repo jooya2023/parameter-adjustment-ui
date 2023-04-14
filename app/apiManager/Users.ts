@@ -2,11 +2,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { DjangoResponseByIdBody, DjangoResponseListBody } from "./Types";
 import axiosClient from "../utils/axiosInstance";
 
-type UserItem = {
+export type UserItem = {
   id?: number | string;
   username: string;
   user_type?: {
-    id: number | string;
+    id: number;
     name: string;
   };
   first_name?: string;
@@ -29,6 +29,13 @@ export function GetUserById(itemId: string) {
     return data;
   }
   return useQuery(["GetUserById", itemId], fetchData);
+}
+export function GetMy() {
+  async function getMy(): Promise<DjangoResponseByIdBody<UserItem>> {
+    const { data } = await axiosClient.get("/users/my");
+    return data;
+  }
+  return useQuery(["GetMy"], getMy);
 }
 
 export function PatchUser() {
@@ -56,4 +63,17 @@ export function CreateUser() {
   return useMutation((changedData: UserItem) =>
     createFurnaceSetting(changedData)
   );
+}
+export function ChangePassword() {
+  async function changePassword(newData: UserItem) {
+    const { data } = await axiosClient.post(
+      `/users/change-password/${newData.id}`,
+      {
+        password: newData.password,
+      }
+    );
+    return data;
+  }
+
+  return useMutation((changedData: UserItem) => changePassword(changedData));
 }

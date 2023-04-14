@@ -14,6 +14,42 @@ type ParameterSetting = {
   };
 };
 
+export type ParameterCalc = {
+  data: {
+    opt_actions_output: {
+      end_time: string;
+      start_time: string;
+      furnace: string;
+    }[];
+    opt_w_in_time: {
+      data: {
+        dolomite: {
+          data: number[];
+          name: string;
+        }[];
+        iron: {
+          data: number[];
+          name: string;
+        }[];
+        lime: {
+          data: number[];
+          name: string;
+        }[];
+      };
+      time: string[];
+    };
+    opt_shooting_list: {
+      start_time: string;
+      duration: number;
+      data: {
+        furnace_1: string;
+        furnace_2: string;
+        notification_time: string;
+      }[];
+    }[];
+  };
+};
+
 export function GetParameterSettingList() {
   async function fetchData(): Promise<
     DjangoResponseListBody<ParameterSetting>
@@ -23,6 +59,7 @@ export function GetParameterSettingList() {
   }
   return useQuery(["GetFurnaceSettingList"], fetchData);
 }
+
 export function GetParameterSettingById(itemId: string) {
   async function fetchData(): Promise<
     DjangoResponseByIdBody<ParameterSetting>
@@ -56,4 +93,12 @@ export function PatchParameterSetting() {
   return useMutation((changedData: ParameterSetting) =>
     updateParameterSetting(changedData)
   );
+}
+
+export function CalculateParameters() {
+  async function fetchData(): Promise<DjangoResponseListBody<ParameterCalc>> {
+    const { data } = await axiosClient.get("/parameter/calc");
+    return data;
+  }
+  return useQuery(["CalculateParameters"], fetchData);
 }

@@ -9,10 +9,11 @@ import {
 import React from "react";
 
 type ParameterFurnaceItemTank = {
+  id: string | number;
   name: string;
   material: string;
-  amount: string;
-  inActiveDuration: string;
+  amount: number;
+  inActiveDuration: number;
 };
 
 export type ParameterFurnaceItemType = {
@@ -20,8 +21,8 @@ export type ParameterFurnaceItemType = {
   name: string;
   tanks: ParameterFurnaceItemTank[];
   ironUsage: {
-    withSeed: string;
-    withoutSeed: string;
+    withSeed: number;
+    withoutSeed: number;
   };
 };
 
@@ -62,10 +63,11 @@ function ParameterFurnaceItem({
                     label={`${tank.name} (${tank.material})`}
                     size="small"
                     value={tank.amount}
+                    type="number"
                     onChange={(e) =>
                       handleUpdateTanks(index, {
                         ...tank,
-                        amount: e.target.value,
+                        amount: parseFloat(e.target.value),
                       })
                     }
                   />
@@ -73,10 +75,11 @@ function ParameterFurnaceItem({
                     label="میزان دقیقه غیر فعال"
                     size="small"
                     value={tank.inActiveDuration}
+                    type="number"
                     onChange={(e) =>
                       handleUpdateTanks(index, {
                         ...tank,
-                        inActiveDuration: e.target.value,
+                        inActiveDuration: parseFloat(e.target.value),
                       })
                     }
                   />
@@ -93,11 +96,12 @@ function ParameterFurnaceItem({
               label="بدون سید زنی"
               size="small"
               value={data.ironUsage.withoutSeed}
+              type="number"
               onChange={(e) =>
                 onChangeData({
                   ...data,
                   ironUsage: {
-                    withoutSeed: e.target.value,
+                    withoutSeed: parseFloat(e.target.value),
                     withSeed: data.ironUsage.withSeed,
                   },
                 })
@@ -107,12 +111,13 @@ function ParameterFurnaceItem({
               label="با سید زنی"
               size="small"
               value={data.ironUsage.withSeed}
+              type="number"
               onChange={(e) =>
                 onChangeData({
                   ...data,
                   ironUsage: {
                     withoutSeed: data.ironUsage.withSeed,
-                    withSeed: e.target.value,
+                    withSeed: parseFloat(e.target.value),
                   },
                 })
               }

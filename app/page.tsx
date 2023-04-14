@@ -1,6 +1,8 @@
 "use client";
 import { Button, Grid, Stack } from "@mui/material";
+import { useRouter } from "next/navigation";
 export default function Home() {
+  const router = useRouter();
   return (
     <Grid
       container
@@ -9,15 +11,13 @@ export default function Home() {
       justifyContent="center"
       direction="column"
     >
-      <h1 className="text-blue-500">Using Material UI with Next.js 13</h1>
-      <h4 className="text-red-500">(with Tailwind CSS)</h4>
+      <h1 className="text-blue-500">نرم افزار تنظیم پارامتر کوره ها</h1>
       <Stack direction="row" columnGap={1}>
-        <Button variant="text" className="text-red-500">
-          Text
+        <Button variant="contained" onClick={() => router.push("/auth/login")}>
+          ورود به سامانه
         </Button>
-        <Button variant="contained">Contained</Button>
-        <Button variant="outlined">Outlined</Button>
       </Stack>
+      <h4 className="text-red-500">دانشگاه یزد</h4>
     </Grid>
   );
 }

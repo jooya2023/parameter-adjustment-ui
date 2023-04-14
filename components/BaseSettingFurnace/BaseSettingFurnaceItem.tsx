@@ -11,33 +11,37 @@ import BaseSettingsInfoChart from "../Charts/BaseSettingsInfoChart/BaseSettingsI
 export type BaseSettingFurnaceItemType = {
   id: number;
   name: string;
+  DRI_usage?: {
+    s: number[];
+    sb: number[];
+  };
   baseSettings: {
-    tabToTab: string;
-    powerOn: string;
+    tabToTab: number;
+    powerOn: number;
   };
   usage: {
-    lime: string;
-    dolomite: string;
+    lime: number;
+    dolomite: number;
   };
   maxCapacity: {
-    iron: string;
-    lime: string;
-    dolomite: string;
+    iron: number;
+    lime: number;
+    dolomite: number;
   };
   minCapacity: {
-    iron: string;
-    lime: string;
-    dolomite: string;
+    iron: number;
+    lime: number;
+    dolomite: number;
   };
   arrivalDelay: {
-    iron: string;
-    lime: string;
-    dolomite: string;
+    iron: number;
+    lime: number;
+    dolomite: number;
   };
   emptyingDelay: {
-    iron: string;
-    lime: string;
-    dolomite: string;
+    iron: number;
+    lime: number;
+    dolomite: number;
   };
 };
 
@@ -74,7 +78,7 @@ function BaseSettingFurnaceItem({
         onChangeData({
           ...data,
           baseSettings: {
-            tabToTab: value,
+            tabToTab: parseFloat(value),
             powerOn: data.baseSettings.powerOn,
           },
         });
@@ -84,7 +88,7 @@ function BaseSettingFurnaceItem({
           ...data,
           baseSettings: {
             tabToTab: data.baseSettings.tabToTab,
-            powerOn: value,
+            powerOn: parseFloat(value),
           },
         });
         break;
@@ -93,7 +97,7 @@ function BaseSettingFurnaceItem({
         onChangeData({
           ...data,
           usage: {
-            lime: value,
+            lime: parseFloat(value),
             dolomite: data.usage.dolomite,
           },
         });
@@ -103,7 +107,7 @@ function BaseSettingFurnaceItem({
           ...data,
           usage: {
             lime: data.usage.lime,
-            dolomite: value,
+            dolomite: parseFloat(value),
           },
         });
         break;
@@ -113,7 +117,7 @@ function BaseSettingFurnaceItem({
         onChangeData({
           ...data,
           maxCapacity: {
-            iron: value,
+            iron: parseFloat(value),
             lime: data.maxCapacity.lime,
             dolomite: data.maxCapacity.dolomite,
           },
@@ -124,7 +128,7 @@ function BaseSettingFurnaceItem({
           ...data,
           maxCapacity: {
             iron: data.maxCapacity.iron,
-            lime: value,
+            lime: parseFloat(value),
             dolomite: data.maxCapacity.dolomite,
           },
         });
@@ -135,7 +139,7 @@ function BaseSettingFurnaceItem({
           maxCapacity: {
             iron: data.maxCapacity.iron,
             lime: data.maxCapacity.lime,
-            dolomite: value,
+            dolomite: parseFloat(value),
           },
         });
         break;
@@ -144,7 +148,7 @@ function BaseSettingFurnaceItem({
         onChangeData({
           ...data,
           minCapacity: {
-            iron: value,
+            iron: parseFloat(value),
             lime: data.minCapacity.lime,
             dolomite: data.minCapacity.dolomite,
           },
@@ -155,7 +159,7 @@ function BaseSettingFurnaceItem({
           ...data,
           minCapacity: {
             iron: data.minCapacity.iron,
-            lime: value,
+            lime: parseFloat(value),
             dolomite: data.minCapacity.dolomite,
           },
         });
@@ -166,7 +170,7 @@ function BaseSettingFurnaceItem({
           minCapacity: {
             iron: data.minCapacity.iron,
             lime: data.minCapacity.lime,
-            dolomite: value,
+            dolomite: parseFloat(value),
           },
         });
         break;
@@ -176,7 +180,7 @@ function BaseSettingFurnaceItem({
         onChangeData({
           ...data,
           arrivalDelay: {
-            iron: value,
+            iron: parseFloat(value),
             lime: data.arrivalDelay.lime,
             dolomite: data.arrivalDelay.dolomite,
           },
@@ -187,7 +191,7 @@ function BaseSettingFurnaceItem({
           ...data,
           arrivalDelay: {
             iron: data.arrivalDelay.iron,
-            lime: value,
+            lime: parseFloat(value),
             dolomite: data.arrivalDelay.dolomite,
           },
         });
@@ -198,7 +202,7 @@ function BaseSettingFurnaceItem({
           arrivalDelay: {
             iron: data.arrivalDelay.iron,
             lime: data.arrivalDelay.lime,
-            dolomite: value,
+            dolomite: parseFloat(value),
           },
         });
         break;
@@ -208,7 +212,7 @@ function BaseSettingFurnaceItem({
         onChangeData({
           ...data,
           emptyingDelay: {
-            iron: value,
+            iron: parseFloat(value),
             lime: data.emptyingDelay.lime,
             dolomite: data.emptyingDelay.dolomite,
           },
@@ -219,7 +223,7 @@ function BaseSettingFurnaceItem({
           ...data,
           emptyingDelay: {
             iron: data.emptyingDelay.iron,
-            lime: value,
+            lime: parseFloat(value),
             dolomite: data.emptyingDelay.dolomite,
           },
         });
@@ -230,7 +234,7 @@ function BaseSettingFurnaceItem({
           emptyingDelay: {
             iron: data.emptyingDelay.iron,
             lime: data.emptyingDelay.lime,
-            dolomite: value,
+            dolomite: parseFloat(value),
           },
         });
         break;
@@ -255,6 +259,7 @@ function BaseSettingFurnaceItem({
                 label="Tab To Tab"
                 size="small"
                 fullWidth
+                type="number"
                 value={data.baseSettings.tabToTab}
                 onChange={(e) =>
                   handleChange(e.target.value, "BASE_TAB_TO_TAB")
@@ -264,6 +269,7 @@ function BaseSettingFurnaceItem({
                 label="Power On"
                 size="small"
                 fullWidth
+                type="number"
                 value={data.baseSettings.powerOn}
                 onChange={(e) => handleChange(e.target.value, "BASE_POWER_ON")}
               />
@@ -273,6 +279,7 @@ function BaseSettingFurnaceItem({
             </Typography>
             <div className="flex gap-2">
               <TextField
+                type="number"
                 label="میزان مصرف آهک"
                 size="small"
                 fullWidth
@@ -280,6 +287,7 @@ function BaseSettingFurnaceItem({
                 onChange={(e) => handleChange(e.target.value, "USAGE_LIME")}
               />
               <TextField
+                type="number"
                 label="میزان مصرف دولومیت"
                 size="small"
                 fullWidth
@@ -292,6 +300,7 @@ function BaseSettingFurnaceItem({
             </Typography>
             <div className="flex gap-2">
               <TextField
+                type="number"
                 label="آهن"
                 size="small"
                 fullWidth
@@ -301,6 +310,7 @@ function BaseSettingFurnaceItem({
                 }
               />
               <TextField
+                type="number"
                 label="آهک"
                 size="small"
                 fullWidth
@@ -310,6 +320,7 @@ function BaseSettingFurnaceItem({
                 }
               />
               <TextField
+                type="number"
                 label="دولومیت"
                 size="small"
                 fullWidth
@@ -324,6 +335,7 @@ function BaseSettingFurnaceItem({
             </Typography>
             <div className="flex gap-2">
               <TextField
+                type="number"
                 label="آهن"
                 size="small"
                 fullWidth
@@ -333,6 +345,7 @@ function BaseSettingFurnaceItem({
                 }
               />
               <TextField
+                type="number"
                 label="آهک"
                 size="small"
                 fullWidth
@@ -342,6 +355,7 @@ function BaseSettingFurnaceItem({
                 }
               />
               <TextField
+                type="number"
                 label="دولومیت"
                 size="small"
                 fullWidth
@@ -356,6 +370,7 @@ function BaseSettingFurnaceItem({
             </Typography>
             <div className="flex gap-2">
               <TextField
+                type="number"
                 label="آهن"
                 size="small"
                 fullWidth
@@ -365,6 +380,7 @@ function BaseSettingFurnaceItem({
                 }
               />
               <TextField
+                type="number"
                 label="آهک"
                 size="small"
                 fullWidth
@@ -374,6 +390,7 @@ function BaseSettingFurnaceItem({
                 }
               />
               <TextField
+                type="number"
                 label="دولومیت"
                 size="small"
                 fullWidth
@@ -388,6 +405,7 @@ function BaseSettingFurnaceItem({
             </Typography>
             <div className="flex gap-2">
               <TextField
+                type="number"
                 label="آهن"
                 size="small"
                 fullWidth
@@ -397,6 +415,7 @@ function BaseSettingFurnaceItem({
                 }
               />
               <TextField
+                type="number"
                 label="آهک"
                 size="small"
                 fullWidth
@@ -406,6 +425,7 @@ function BaseSettingFurnaceItem({
                 }
               />
               <TextField
+                type="number"
                 label="دولومیت"
                 size="small"
                 fullWidth
@@ -419,20 +439,31 @@ function BaseSettingFurnaceItem({
           <Divider orientation="vertical" flexItem className="mx-2" />
           <div className="w-[350px] text-center flex justify-center flex-col items-center">
             <span>نمودار ها</span>
-            <BaseSettingsInfoChart
-              series={[
-                {
-                  data: [],
-                },
-              ]}
-            />
-            <BaseSettingsInfoChart
-              series={[
-                {
-                  data: [],
-                },
-              ]}
-            />
+            {data.DRI_usage?.s ? (
+              <BaseSettingsInfoChart
+                title="بدون سبد زنی"
+                series={[
+                  {
+                    data: data.DRI_usage.s,
+                  },
+                ]}
+              />
+            ) : (
+              <Typography>برای این مورد نموداری وجود ندارد</Typography>
+            )}
+
+            {data.DRI_usage?.s ? (
+              <BaseSettingsInfoChart
+                title="با سبد زنی"
+                series={[
+                  {
+                    data: data.DRI_usage.sb,
+                  },
+                ]}
+              />
+            ) : (
+              <Typography>برای این مورد نموداری وجود ندارد</Typography>
+            )}
           </div>
         </div>
       </CardContent>
