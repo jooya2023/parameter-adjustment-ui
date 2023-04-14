@@ -6,7 +6,7 @@ export type UserItem = {
   id?: number | string;
   username: string;
   user_type?: {
-    id: number;
+    id: number | string;
     name: string;
   };
   first_name?: string;
@@ -30,6 +30,7 @@ export function GetUserById(itemId: string) {
   }
   return useQuery(["GetUserById", itemId], fetchData);
 }
+
 export function GetMy() {
   async function getMy(): Promise<DjangoResponseByIdBody<UserItem>> {
     const { data } = await axiosClient.get("/users/my");
@@ -64,18 +65,25 @@ export function CreateUser() {
     createFurnaceSetting(changedData)
   );
 }
-export function ChangePassword() {
-  async function changePassword(newData: UserItem) {
-    const { data } = await axiosClient.post(
-      `/users/change-password/${newData.id}`,
+
+export function ChangeUserPassword() {
+  async function changeUserPassword(updatedData: {
+    id: number | string;
+    newPassword: string;
+  }) {
+    const { data } = await axiosClient.patch(
+      `/users/reset-password/${updatedData.id}/`,
       {
-        password: newData.password,
+        password: updatedData.newPassword,
       }
     );
     return data;
   }
 
-  return useMutation((changedData: UserItem) => changePassword(changedData));
+  return useMutation(
+    (changedData: { id: number | string; newPassword: string }) =>
+      changeUserPassword(changedData)
+  );
 }
 
 export function LogOutUser() {

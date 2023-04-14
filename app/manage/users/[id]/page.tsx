@@ -1,6 +1,10 @@
 "use client";
 
-import { GetUserById, PatchUser } from "@/app/apiManager/Users";
+import {
+  ChangeUserPassword,
+  GetUserById,
+  PatchUser,
+} from "@/app/apiManager/Users";
 import { autoCompleteOption, pagesLayoutData } from "@/components/Types";
 import {
   Autocomplete,
@@ -43,6 +47,12 @@ function EditUserPage({ params, searchParams }: pagesLayoutData) {
     isSuccess: isPatchSuccess,
   } = PatchUser();
 
+  const {
+    mutate: mutateChangePass,
+    isLoading: changePassLoading,
+    isSuccess: changePassSuccess,
+  } = ChangeUserPassword();
+
   const [firstName, setFirstName] = useState(" ");
   const [lastName, setLastName] = useState(" ");
   const [username, setUsername] = useState(" ");
@@ -74,12 +84,19 @@ function EditUserPage({ params, searchParams }: pagesLayoutData) {
     });
   }
 
+  function handleChangePassword() {
+    mutateChangePass({
+      id: params.id,
+      newPassword: newPassword,
+    });
+  }
+
   useEffect(() => {
-    if (isPatchSuccess) {
+    if (isPatchSuccess || changePassSuccess) {
       router.push("/manage/users");
       toast.success("عملیات با موفقیت انجام شد.");
     }
-  }, [isPatchSuccess, router]);
+  }, [isPatchSuccess, changePassSuccess, router]);
 
   if (getLoading) {
     return <CircularProgress />;
@@ -138,8 +155,19 @@ function EditUserPage({ params, searchParams }: pagesLayoutData) {
 
             <Divider />
             <Typography>ویرایش کلمه عبور</Typography>
-            <TextField label="کلمه عبور جدید" size="small" fullWidth />
-            <Button variant="contained">ویرایش کلمه عبور</Button>
+            <TextField
+              label="کلمه عبور جدید"
+              size="small"
+              fullWidth
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <Button
+              variant="contained"
+              onClick={handleChangePassword}
+              disabled={changePassLoading}
+            >
+              ویرایش کلمه عبور
+            </Button>
           </CardContent>
         </Card>
       </div>
