@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  CreateFurnaceSetting,
-  GetFurnaceSettingById,
-} from "@/app/apiManager/FurnaceSetting";
+import { CreateFurnaceSetting } from "@/app/apiManager/FurnaceSetting";
 import BaseSettingFurnaceItem, {
   BaseSettingFurnaceItemType,
 } from "@/components/BaseSettingFurnace/BaseSettingFurnaceItem";
@@ -13,28 +10,15 @@ import {
   Card,
   CardContent,
   TextField,
-  CircularProgress,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AiOutlineCheck } from "react-icons/ai";
 import BaseSettingChargeRate, {
   BaseSettingChargeRateType,
 } from "@/components/BaseSettingFurnace/BaseSettingChargeRate";
 import { useRouter } from "next/navigation";
 
-type BaseSettingsType = {
-  furnaces: BaseSettingFurnaceItemType[];
-  chargeRate: BaseSettingChargeRateType;
-  name: string;
-};
-
-function BaseSettingsPage({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+function BaseSettingsPage() {
   const [name, setName] = useState("");
   const [furnaces, setFurnaces] = useState<BaseSettingFurnaceItemType[]>([
     {

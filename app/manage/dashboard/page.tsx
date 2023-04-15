@@ -214,7 +214,6 @@ function DashboardPage() {
       </Tabs>
       <TabPanel value={value} index={0}>
         <DashboardPinTimeChart series={planChartData} />
-        {/* series={planChartData} */}
       </TabPanel>
       <TabPanel value={value} index={1}>
         <DashboardUsageChart

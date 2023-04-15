@@ -14,7 +14,7 @@ type headers = {
 axiosClient.defaults.headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
-} as headers & HeadersDefaults;
+} as headers & HeadersDefaults & any;
 
 // Adding Authorization header for all requests
 

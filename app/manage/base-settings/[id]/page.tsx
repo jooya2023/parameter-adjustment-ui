@@ -31,113 +31,6 @@ type BaseSettingsType = {
   name: string;
 };
 
-const BaseSetting: BaseSettingsType = {
-  name: "",
-  furnaces: [
-    {
-      id: 1,
-      name: "کوره ۱",
-      baseSettings: {
-        tabToTab: "2",
-        powerOn: "2",
-      },
-      usage: {
-        lime: "2",
-        dolomite: "2",
-      },
-      maxCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-      minCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-      arrivalDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-      emptyingDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-    },
-    {
-      id: 2,
-      name: "کوره ۲",
-      baseSettings: {
-        tabToTab: "2",
-        powerOn: "2",
-      },
-      usage: {
-        lime: "2",
-        dolomite: "2",
-      },
-      maxCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-      minCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-      arrivalDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-      emptyingDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-    },
-    {
-      id: 3,
-      name: "کوره ۳",
-      baseSettings: {
-        tabToTab: "2",
-        powerOn: "2",
-      },
-      usage: {
-        lime: "2",
-        dolomite: "2",
-      },
-      maxCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-      minCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-      arrivalDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-      emptyingDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
-      },
-    },
-  ],
-  chargeRate: {
-    iron: "5",
-    lime: "5",
-    dolomite: "5",
-  },
-};
-
 function BaseSettingsPage({ params, searchParams }: pagesLayoutData) {
   const { data, isLoading, refetch } = GetFurnaceSettingById(`${params.id}`);
   const [name, setName] = useState("");
@@ -146,103 +39,103 @@ function BaseSettingsPage({ params, searchParams }: pagesLayoutData) {
       id: 1,
       name: "کوره ۱",
       baseSettings: {
-        tabToTab: "2",
-        powerOn: "2",
+        tabToTab: 0,
+        powerOn: 0,
       },
       usage: {
-        lime: "2",
-        dolomite: "2",
+        lime: 0,
+        dolomite: 0,
       },
       maxCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
       minCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
       arrivalDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
       emptyingDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
     },
     {
-      id: 2,
+      id: 0,
       name: "کوره ۲",
       baseSettings: {
-        tabToTab: "2",
-        powerOn: "2",
+        tabToTab: 0,
+        powerOn: 0,
       },
       usage: {
-        lime: "2",
-        dolomite: "2",
+        lime: 0,
+        dolomite: 0,
       },
       maxCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
       minCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
       arrivalDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
       emptyingDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
     },
     {
       id: 3,
       name: "کوره ۳",
       baseSettings: {
-        tabToTab: "2",
-        powerOn: "2",
+        tabToTab: 0,
+        powerOn: 0,
       },
       usage: {
-        lime: "2",
-        dolomite: "2",
+        lime: 0,
+        dolomite: 0,
       },
       maxCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
       minCapacity: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
       arrivalDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
       emptyingDelay: {
-        iron: "2",
-        lime: "2",
-        dolomite: "2",
+        iron: 0,
+        lime: 0,
+        dolomite: 0,
       },
     },
   ]);
   const [chargeRate, setChargeRate] = useState<BaseSettingChargeRateType>({
-    iron: "",
-    lime: "",
-    dolomite: "",
+    iron: 0,
+    lime: 0,
+    dolomite: 0,
   });
 
   const router = useRouter();

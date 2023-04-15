@@ -1,15 +1,11 @@
-import React from "react";
-import ReactApexChart from "react-apexcharts";
-import fa from "apexcharts/dist/locales/fa.json";
+"use client";
 
-// const series = [
-//   {
-//     name: "Desktops1",
-//     data: [1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => {
-//       return Math.floor(Math.random() * 100);
-//     }),
-//   },
-// ];
+import React from "react";
+import dynamic from "next/dynamic";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
+import fa from "apexcharts/dist/locales/fa.json";
 
 function BaseSettingsInfoChart({
   series,

@@ -1,5 +1,10 @@
+"use client";
+
 import React from "react";
-import ReactApexChart from "react-apexcharts";
+import dynamic from "next/dynamic";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 import fa from "apexcharts/dist/locales/fa.json";
 
 const series = [

@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
-import ReactApexChart from "react-apexcharts";
-import Chart from "react-apexcharts";
-import fa from "apexcharts/dist/locales/fa.json";
-import toast from "react-hot-toast";
-import { Tabs, Tab } from "@mui/material";
+import React from "react";
+import dynamic from "next/dynamic";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 const options: ApexCharts.ApexOptions = {
   chart: {
