@@ -4,6 +4,7 @@ import ParameterFurnaceItem, {
   ParameterFurnaceItemType,
 } from "@/components/ParameterFurnace/ParameterFurnaceItem";
 import GateStatus, { gateStatusType } from "@/components/gateStatus/gateStatus";
+import { useGetFormatDateMinusMins } from "@/hooks/useGetFormatDateMinusMins";
 import {
   Button,
   Card,
@@ -15,6 +16,13 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineReload, AiOutlineCheck } from "react-icons/ai";
+
+function calculateStartTime(selector: number) {
+  const now = new Date();
+  const nowMinus4 = new Date().setMinutes(now.getMinutes() - 4);
+  const nowMinus8 = new Date().setMinutes(now.getMinutes() - 8);
+  const nowMinus12 = new Date().setMinutes(now.getMinutes() - 12);
+}
 
 function ParameterSettingsPage() {
   const [furnaces, setFurnaces] = useState<ParameterFurnaceItemType[]>([
@@ -157,18 +165,17 @@ function ParameterSettingsPage() {
   const [gatesStatus, setGatesStatus] = useState<gateStatusType[]>([
     {
       gate: null,
-      // time: new Date(new Date().setMinutes(new Date().getMinutes() - 4)),
-      time: "00:00",
+      time: useGetFormatDateMinusMins(4, "HH:mm"),
       duration: "4",
     },
     {
       gate: null,
-      time: "00:00",
+      time: useGetFormatDateMinusMins(8, "HH:mm"),
       duration: "4",
     },
     {
       gate: null,
-      time: "00:00",
+      time: useGetFormatDateMinusMins(12, "HH:mm"),
       duration: "4",
     },
   ]);

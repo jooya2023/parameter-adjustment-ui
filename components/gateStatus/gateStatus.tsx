@@ -16,15 +16,51 @@ export type gateStatusType = {
 const gates: autoCompleteOption[] = [
   {
     id: 1,
-    label: "دریچه ۱",
+    label: "بین ۵ کوره ۱",
   },
   {
-    id: 2,
-    label: "دریچه ۲",
+    id: 1,
+    label: "بین ۷ کوره ۱",
   },
   {
-    id: 3,
-    label: "دریچه ۳",
+    id: 1,
+    label: "بین ۹ کوره ۱",
+  },
+  {
+    id: 1,
+    label: "بین ۱۰ کوره ۱",
+  },
+  {
+    id: 1,
+    label: "بین ۵ کوره ۲",
+  },
+  {
+    id: 1,
+    label: "بین ۷ کوره ۲",
+  },
+  {
+    id: 1,
+    label: "بین ۹ کوره ۲",
+  },
+  {
+    id: 1,
+    label: "بین ۱۰ کوره ۲",
+  },
+  {
+    id: 1,
+    label: "بین ۱۳ کوره ۳",
+  },
+  {
+    id: 1,
+    label: "بین ۱۴ کوره ۳",
+  },
+  {
+    id: 1,
+    label: "بین ۱۵ کوره ۳",
+  },
+  {
+    id: 1,
+    label: "بین ۱۶ کوره ۳",
   },
 ];
 
@@ -56,7 +92,9 @@ function GateStatus({
       <TextField
         label="مدت (دقیقه)"
         size="small"
-        className="w-[120px]"
+        sx={{
+          maxWidth: "100px",
+        }}
         value={data.duration}
         onChange={(e) => {
           onChangeData({
@@ -69,6 +107,9 @@ function GateStatus({
         label="ساعت"
         size="small"
         className="w-[70px]"
+        sx={{
+          maxWidth: "150px",
+        }}
         value={data.time}
         onChange={(e) => {
           onChangeData({
