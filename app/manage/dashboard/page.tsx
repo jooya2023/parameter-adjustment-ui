@@ -39,7 +39,6 @@ function DashboardPage() {
   const [value, setValue] = React.useState(0);
   const { data, isLoading } = GetParametersResult();
 
-  const [usageTimes, setUsageTimes] = useState<any[]>([]);
   const [dolomiteSeries, setDolomiteSeries] = useState<
     ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
   >([]);
@@ -66,41 +65,18 @@ function DashboardPage() {
         message: string;
       }[] = [];
 
-      const times = data?.result[0].data.opt_w_in_time.time.map((item) => {
-        return FormatToPersianDate(item, "hh:mm");
-      });
-      const filteredTimes = times.filter((time, index) => {
-        if (index % 2 === 0) {
-          return true;
-        }
-        return false;
-      });
-      setUsageTimes(filteredTimes);
+      const dolomiteData =
+        data?.result[0]?.data?.opt_w_in_time?.data?.dolomite?.map((item) => ({
+          name: item.name,
+          data: item.data.filter((dataItem, index) => index % 2 === 0),
+        }));
 
-      const dolomiteData = data?.result[0].data.opt_w_in_time.data.dolomite.map(
-        (item) => {
-          return {
-            name: item.name,
-            data: item.data.filter((dataItem, index) => {
-              if (index % 2 === 0) {
-                return true;
-              }
-              return false;
-            }),
-          };
-        }
-      );
       setDolomiteSeries(dolomiteData);
       const limeData = data?.result[0].data.opt_w_in_time.data.lime.map(
         (item) => {
           return {
             name: item.name,
-            data: item.data.filter((dataItem, index) => {
-              if (index % 2 === 0) {
-                return true;
-              }
-              return false;
-            }),
+            data: item.data.filter((dataItem, index) => index % 2 === 0),
           };
         }
       );
@@ -109,18 +85,14 @@ function DashboardPage() {
         (item) => {
           return {
             name: item.name,
-            data: item.data.filter((dataItem, index) => {
-              if (index % 2 === 0) {
-                return true;
-              }
-              return false;
-            }),
+            data: item.data.filter((dataItem, index) => index % 2 === 0),
           };
         }
       );
       setIronSeries(ironData);
 
-      let aaa: {
+      const newData = data?.result[0]?.data?.opt_actions_output || [];
+      const aaa: {
         name: string;
         data: {
           x: string;
@@ -128,52 +100,34 @@ function DashboardPage() {
         }[];
       }[] = [];
 
-      data?.result[0].data.opt_actions_output.forEach((item) => {
+      newData.forEach((item) => {
         if (item.furnace !== "") {
-          let insertFlag = true;
-          aaa.forEach((subItem, index) => {
-            if (subItem.name === item.furnace) {
-              notificationTemp.push({
-                date: new Date(new Date(item.start_time).getTime() - 60000),
-                message: `تغییر به ${item.furnace} در ۱ دقیقه آینده`,
-              });
-              console.log(new Date(item.start_time));
-              console.log(new Date(item.end_time));
-
-              aaa[index].data.push({
-                x: item.furnace,
-                y: [
-                  new Date(
-                    new Date(item.start_time).getTime() + 12600000
-                  ).getTime(),
-                  new Date(
-                    new Date(item.end_time).getTime() + 12600000
-                  ).getTime(),
-                ],
-              });
-              insertFlag = false;
-            }
-          });
-          if (insertFlag) {
+          let index = aaa.findIndex((subItem) => subItem.name === item.furnace);
+          if (index >= 0) {
             notificationTemp.push({
               date: new Date(new Date(item.start_time).getTime() - 60000),
               message: `تغییر به ${item.furnace} در ۱ دقیقه آینده`,
             });
-            console.log(new Date(new Date(item.start_time).getTime()));
-            console.log(new Date(new Date(item.end_time).getTime()));
+            aaa[index].data.push({
+              x: item.furnace,
+              y: [
+                new Date(item.start_time).getTime(),
+                new Date(item.end_time).getTime(),
+              ],
+            });
+          } else {
+            notificationTemp.push({
+              date: new Date(new Date(item.start_time).getTime() - 60000),
+              message: `تغییر به ${item.furnace} در ۱ دقیقه آینده`,
+            });
             aaa.push({
               name: item.furnace,
               data: [
                 {
                   x: item.furnace,
                   y: [
-                    new Date(
-                      new Date(item.start_time).getTime() + 12600000
-                    ).getTime(),
-                    new Date(
-                      new Date(item.end_time).getTime() + 12600000
-                    ).getTime(),
-                    // new Date(item.end_time).getTime(),
+                    new Date(item.start_time).getTime(),
+                    new Date(item.end_time).getTime(),
                   ],
                 },
               ],
@@ -182,22 +136,23 @@ function DashboardPage() {
         }
       });
       setPlanChartData(aaa);
-
-      data?.result[0].data.opt_shooting_list.forEach((item) => {
-        notificationTemp.push({
+      notificationTemp = notificationTemp.concat(
+        data?.result?.[0]?.data?.opt_shooting_list.map((item) => ({
           date: new Date(new Date(item.start_time).getTime() - 60000),
           message: `از یک دقیقه آینده به مدت ${item.duration} دقیقه شوتینگ باید رخ بدهد`,
-        });
-        item.data.forEach((subItem) => {
-          notifications.push({
+        }))
+      );
+      notificationTemp = notificationTemp.concat(
+        data?.result?.[0]?.data?.opt_shooting_list.flatMap((item) =>
+          item.data.map((subItem) => ({
             date: new Date(
               new Date(subItem.notification_time).getTime() - 60000
             ),
             message: `تغییر  ${subItem.furnace_1} به ${subItem.furnace_2}`,
-          });
-          console.log(subItem);
-        });
-      });
+          }))
+        )
+      );
+
       setNotifications(notificationTemp);
     }
   }, [data]);
@@ -256,7 +211,6 @@ function DashboardPage() {
           dolomiteSeries={dolomiteSeries}
           ironSeries={ironSeries}
           limeSeries={limeSeries}
-          usageTimes={usageTimes}
         />
       </TabPanel>
     </div>
