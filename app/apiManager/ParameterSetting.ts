@@ -107,7 +107,7 @@ export function RebuildParametersResult() {
   async function rebuildParametersResult(): Promise<
     DjangoResponseListBody<ParameterCalc>
   > {
-    const { data } = await axiosClient.post("/parameter/calc");
+    const { data } = await axiosClient.post("/parameter/calc/");
     return data;
   }
   return useMutation(() => rebuildParametersResult());

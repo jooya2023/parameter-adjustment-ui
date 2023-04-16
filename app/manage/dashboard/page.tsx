@@ -68,13 +68,24 @@ function DashboardPage() {
       const times = data?.result[0].data.opt_w_in_time.time.map((item) => {
         return FormatToPersianDate(item, "hh:mm");
       });
-      setUsageTimes(times);
+      const filteredTimes = times.filter((time, index) => {
+        if (index % 2 === 0) {
+          return true;
+        }
+        return false;
+      });
+      setUsageTimes(filteredTimes);
 
       const dolomiteData = data?.result[0].data.opt_w_in_time.data.dolomite.map(
         (item) => {
           return {
             name: item.name,
-            data: item.data,
+            data: item.data.filter((dataItem, index) => {
+              if (index % 2 === 0) {
+                return true;
+              }
+              return false;
+            }),
           };
         }
       );
@@ -83,7 +94,12 @@ function DashboardPage() {
         (item) => {
           return {
             name: item.name,
-            data: item.data,
+            data: item.data.filter((dataItem, index) => {
+              if (index % 2 === 0) {
+                return true;
+              }
+              return false;
+            }),
           };
         }
       );
@@ -92,7 +108,12 @@ function DashboardPage() {
         (item) => {
           return {
             name: item.name,
-            data: item.data,
+            data: item.data.filter((dataItem, index) => {
+              if (index % 2 === 0) {
+                return true;
+              }
+              return false;
+            }),
           };
         }
       );
