@@ -19,6 +19,7 @@ import {
   GetParameterSettingList,
   RebuildParametersResult,
 } from "@/app/apiManager/ParameterSetting";
+import LoadingPage from "@/components/Loading/LoadingPage";
 
 function ParameterSettingsPage() {
   const router = useRouter();
@@ -108,6 +109,7 @@ function ParameterSettingsPage() {
 
   return (
     <div className="p-2">
+      {loadingRebuild && <LoadingPage size={40} />}
       <div className="flex flex-row mb-2">
         <Typography variant="subtitle1" className="flex-1">
           مدیریت تنظیمات پارامتر
