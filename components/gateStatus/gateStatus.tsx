@@ -15,15 +15,15 @@ export type gateStatusType = {
 
 const gates: autoCompleteOption[] = [
   {
-    id: 1,
+    id: 6,
     label: "بین ۵ کوره ۱",
   },
   {
-    id: 1,
+    id: 9,
     label: "بین ۷ کوره ۱",
   },
   {
-    id: 1,
+    id: 0,
     label: "بین ۹ کوره ۱",
   },
   {
@@ -31,35 +31,35 @@ const gates: autoCompleteOption[] = [
     label: "بین ۱۰ کوره ۱",
   },
   {
-    id: 1,
+    id: 7,
     label: "بین ۵ کوره ۲",
   },
   {
-    id: 1,
+    id: 10,
     label: "بین ۷ کوره ۲",
   },
   {
-    id: 1,
+    id: 2,
     label: "بین ۹ کوره ۲",
   },
   {
-    id: 1,
+    id: 3,
     label: "بین ۱۰ کوره ۲",
   },
   {
-    id: 1,
+    id: 11,
     label: "بین ۱۳ کوره ۳",
   },
   {
-    id: 1,
+    id: 8,
     label: "بین ۱۴ کوره ۳",
   },
   {
-    id: 1,
+    id: 4,
     label: "بین ۱۵ کوره ۳",
   },
   {
-    id: 1,
+    id: 5,
     label: "بین ۱۶ کوره ۳",
   },
 ];
