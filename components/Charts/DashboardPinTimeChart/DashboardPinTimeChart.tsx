@@ -14,69 +14,69 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-const options: ApexCharts.ApexOptions = {
-  chart: {
-    // locales: [fa],
-    // defaultLocale: "fa",
-    type: "rangeBar",
-    width: "100%",
-  },
-  plotOptions: {
-    bar: {
-      horizontal: true,
-      barHeight: "100%",
-      rangeBarGroupRows: true,
-    },
-  },
-  xaxis: {
-    type: "datetime",
-    tickAmount: 40,
-    labels: {
-      datetimeUTC: false,
-      formatter: function (value, timestamp, opts) {
-        return FormatToPersianDate(value, "HH:mm");
-      },
-    },
-  },
-  tooltip: {
-    enabled: true,
-    custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-      const values = w.config.series[seriesIndex].data[dataPointIndex].y;
-      let val1 = `${new Date(values[0]).getHours()}:${new Date(
-        values[0]
-      ).getMinutes()}`;
-      let val2 = `${new Date(values[1]).getHours()}:${new Date(
-        values[1]
-      ).getMinutes()}`;
-
-      return (
-        '<div class="arrow_box">' +
-        "<span>" +
-        `از ساعت ${val1} تا ساعت ${val2}` +
-        "</span>" +
-        "</div>"
-      );
-    },
-  },
-
-  stroke: {
-    width: 1,
-  },
-  fill: {
-    type: "solid",
-    opacity: 0.8,
-  },
-  legend: {
-    position: "top",
-    horizontalAlign: "left",
-  },
-};
-
 function DashboardPinTimeChart({
   chartData,
 }: {
   chartData: ParameterCalc | undefined;
 }) {
+  const options: ApexCharts.ApexOptions = {
+    chart: {
+      // locales: [fa],
+      // defaultLocale: "fa",
+      type: "rangeBar",
+      width: "100%",
+      id: "pinTimeChart",
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        barHeight: "100%",
+        rangeBarGroupRows: true,
+      },
+    },
+    xaxis: {
+      type: "datetime",
+      tickAmount: 40,
+      labels: {
+        datetimeUTC: false,
+        formatter: function (value, timestamp, opts) {
+          return FormatToPersianDate(value, "HH:mm");
+        },
+      },
+    },
+    tooltip: {
+      enabled: true,
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        const values = w.config.series[seriesIndex].data[dataPointIndex].y;
+        let val1 = `${new Date(values[0]).getHours()}:${new Date(
+          values[0]
+        ).getMinutes()}`;
+        let val2 = `${new Date(values[1]).getHours()}:${new Date(
+          values[1]
+        ).getMinutes()}`;
+
+        return (
+          '<div class="arrow_box">' +
+          "<span>" +
+          `از ساعت ${val1} تا ساعت ${val2}` +
+          "</span>" +
+          "</div>"
+        );
+      },
+    },
+
+    stroke: {
+      width: 1,
+    },
+    fill: {
+      type: "solid",
+      opacity: 0.8,
+    },
+    legend: {
+      position: "top",
+      horizontalAlign: "left",
+    },
+  };
   const [planChartData, setPlanChartData] = useState<any[]>([]);
 
   const [notifications, setNotifications] = useState<
@@ -89,6 +89,7 @@ function DashboardPinTimeChart({
   const [audioEnabled, setAudioEnabled] = useState(false);
 
   const audioPlayer = useRef<any>(null);
+  const chart = useRef<any>(null);
 
   const playNotificationAudio = useCallback(() => {
     if (audioEnabled) {
@@ -172,7 +173,19 @@ function DashboardPinTimeChart({
   useEffect(() => {
     const checkCurrentDateInArray = () => {
       const now = new Date(); // get the current date
-
+      ApexCharts.exec("pinTimeChart", "clearAnnotations");
+      ApexCharts.exec("pinTimeChart", "addXaxisAnnotation", {
+        x: now.getTime(),
+        strokeDashArray: 2,
+        label: {
+          borderColor: "#FF4560",
+          style: {
+            color: "#fff",
+            background: "#FF4560",
+          },
+          text: "زمان حال",
+        },
+      });
       notifications.forEach((date) => {
         if (
           Math.floor(date.date.getTime() / 1000) ===
