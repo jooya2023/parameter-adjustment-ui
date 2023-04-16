@@ -39,16 +39,6 @@ function DashboardPage() {
   const [value, setValue] = React.useState(0);
   const { data, isLoading } = GetParametersResult();
 
-  const [dolomiteSeries, setDolomiteSeries] = useState<
-    ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
-  >([]);
-  const [limeSeries, setLimeSeries] = useState<
-    ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
-  >([]);
-  const [ironSeries, setIronSeries] = useState<
-    ApexAxisChartSeries | ApexNonAxisChartSeries | undefined
-  >([]);
-
   const [planChartData, setPlanChartData] = useState<any[]>([]);
 
   const [notifications, setNotifications] = useState<
@@ -64,32 +54,6 @@ function DashboardPage() {
         date: Date;
         message: string;
       }[] = [];
-
-      const dolomiteData =
-        data?.result[0]?.data?.opt_w_in_time?.data?.dolomite?.map((item) => ({
-          name: item.name,
-          data: item.data.filter((dataItem, index) => index % 2 === 0),
-        }));
-
-      setDolomiteSeries(dolomiteData);
-      const limeData = data?.result[0].data.opt_w_in_time.data.lime.map(
-        (item) => {
-          return {
-            name: item.name,
-            data: item.data.filter((dataItem, index) => index % 2 === 0),
-          };
-        }
-      );
-      setLimeSeries(limeData);
-      const ironData = data?.result[0].data.opt_w_in_time.data.iron.map(
-        (item) => {
-          return {
-            name: item.name,
-            data: item.data.filter((dataItem, index) => index % 2 === 0),
-          };
-        }
-      );
-      setIronSeries(ironData);
 
       const newData = data?.result[0]?.data?.opt_actions_output || [];
       const aaa: {
@@ -208,9 +172,7 @@ function DashboardPage() {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <DashboardUseCharts
-          dolomiteSeries={dolomiteSeries}
-          ironSeries={ironSeries}
-          limeSeries={limeSeries}
+          chartsData={data?.result[0]?.data?.opt_w_in_time?.data}
         />
       </TabPanel>
     </div>
