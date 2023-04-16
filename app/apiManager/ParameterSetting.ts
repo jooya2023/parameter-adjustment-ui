@@ -95,10 +95,20 @@ export function PatchParameterSetting() {
   );
 }
 
-export function CalculateParameters() {
+export function GetParametersResult() {
   async function fetchData(): Promise<DjangoResponseListBody<ParameterCalc>> {
-    const { data } = await axiosClient.get("/parameter/calc");
+    const { data } = await axiosClient.get("/parameter/calc-data");
     return data;
   }
-  return useQuery(["CalculateParameters"], fetchData);
+  return useQuery(["GetParametersResult"], fetchData);
+}
+
+export function RebuildParametersResult() {
+  async function rebuildParametersResult(): Promise<
+    DjangoResponseListBody<ParameterCalc>
+  > {
+    const { data } = await axiosClient.post("/parameter/calc");
+    return data;
+  }
+  return useMutation(() => rebuildParametersResult());
 }

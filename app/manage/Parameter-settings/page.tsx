@@ -9,13 +9,16 @@ import {
   Switch,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { AiFillPlusCircle, AiOutlineHistory } from "react-icons/ai";
 import { GrEdit } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import { PatchFurnaceSetting } from "@/app/apiManager/FurnaceSetting";
 import { toast } from "react-hot-toast";
 import { FormatToPersianDate } from "@/hooks/useFormatToPersianDate";
-import { GetParameterSettingList } from "@/app/apiManager/ParameterSetting";
+import {
+  GetParameterSettingList,
+  RebuildParametersResult,
+} from "@/app/apiManager/ParameterSetting";
 
 function ParameterSettingsPage() {
   const router = useRouter();
@@ -27,6 +30,8 @@ function ParameterSettingsPage() {
     refetch,
   } = GetParameterSettingList();
   const { mutate, isLoading: isUpdateLoading } = PatchFurnaceSetting();
+  const { mutate: mutateRebuild, isLoading: loadingRebuild } =
+    RebuildParametersResult();
   const columns: GridColDef[] = useMemo(
     () => [
       {
@@ -107,6 +112,16 @@ function ParameterSettingsPage() {
         <Typography variant="subtitle1" className="flex-1">
           مدیریت تنظیمات پارامتر
         </Typography>
+        <Button
+          color="warning"
+          variant="contained"
+          startIcon={<AiOutlineHistory />}
+          onClick={() => mutateRebuild()}
+          className="mx-2"
+          disabled={loadingRebuild}
+        >
+          محاسبه مجدد
+        </Button>
         <Button
           color="success"
           variant="contained"

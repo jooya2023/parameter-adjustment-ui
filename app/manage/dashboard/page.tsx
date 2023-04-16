@@ -4,7 +4,7 @@ import { Tabs, Tab, Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DashboardPinTimeChart from "@/components/Charts/DashboardPinTimeChart/DashboardPinTimeChart";
 import DashboardUsageChart from "@/components/Charts/DashboardUsageChart/DashboardUsageChart";
-import { CalculateParameters } from "@/app/apiManager/ParameterSetting";
+import { GetParametersResult } from "@/app/apiManager/ParameterSetting";
 import { FormatToPersianDate } from "@/hooks/useFormatToPersianDate";
 import { toast } from "react-hot-toast";
 
@@ -36,7 +36,7 @@ function TabPanel(props: TabPanelProps) {
 
 function DashboardPage() {
   const [value, setValue] = React.useState(0);
-  const { data, isLoading } = CalculateParameters();
+  const { data, isLoading } = GetParametersResult();
 
   const [usageTimes, setUsageTimes] = useState<any[]>([]);
   const [dolomiteSeries, setDolomiteSeries] = useState<
