@@ -54,7 +54,7 @@ function ParameterFurnaceItem({
         <div className="flex">
           <div className="flex flex-1 items-center gap-3 flex-col">
             <Typography className="text-center" variant="subtitle1">
-              وزن پین ها
+              وزن بین ها
             </Typography>
             {data.tanks.map((tank, index) => {
               return (

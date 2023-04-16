@@ -64,7 +64,7 @@ function ParameterSettingsPage() {
         },
         {
           id: 5,
-          material: "پین کمکی",
+          material: "بین کمکی",
           name: "مخزن ۱۰",
           amount: 0,
           inActiveDuration: 0,
@@ -109,7 +109,7 @@ function ParameterSettingsPage() {
         },
         {
           id: 5,
-          material: "پین کمکی",
+          material: "بین کمکی",
           name: "مخزن ۱۰",
           amount: 0,
           inActiveDuration: 0,
@@ -154,7 +154,7 @@ function ParameterSettingsPage() {
         },
         {
           id: 5,
-          material: "پین کمکی",
+          material: "بین کمکی",
           name: "مخزن ۱۰",
           amount: 0,
           inActiveDuration: 0,
