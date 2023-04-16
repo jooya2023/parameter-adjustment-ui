@@ -3,10 +3,11 @@
 import { Tabs, Tab, Box, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DashboardPinTimeChart from "@/components/Charts/DashboardPinTimeChart/DashboardPinTimeChart";
-import DashboardUsageChart from "@/components/Charts/DashboardUsageChart/DashboardUsageChart";
+import DashboardUsageChart from "@/components/Charts/DashboardUseCharts/DashboardUsageChart/DashboardUsageChart";
 import { GetParametersResult } from "@/app/apiManager/ParameterSetting";
 import { FormatToPersianDate } from "@/hooks/useFormatToPersianDate";
 import { toast } from "react-hot-toast";
+import DashboardUseCharts from "@/components/Charts/DashboardUseCharts/DashboardUseCharts";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -136,11 +137,18 @@ function DashboardPage() {
                 date: new Date(new Date(item.start_time).getTime() - 60000),
                 message: `تغییر به ${item.furnace} در ۱ دقیقه آینده`,
               });
+              console.log(new Date(item.start_time));
+              console.log(new Date(item.end_time));
+
               aaa[index].data.push({
                 x: item.furnace,
                 y: [
-                  new Date(item.start_time).getTime(),
-                  new Date(item.end_time).getTime(),
+                  new Date(
+                    new Date(item.start_time).getTime() + 12600000
+                  ).getTime(),
+                  new Date(
+                    new Date(item.end_time).getTime() + 12600000
+                  ).getTime(),
                 ],
               });
               insertFlag = false;
@@ -151,14 +159,21 @@ function DashboardPage() {
               date: new Date(new Date(item.start_time).getTime() - 60000),
               message: `تغییر به ${item.furnace} در ۱ دقیقه آینده`,
             });
+            console.log(new Date(new Date(item.start_time).getTime()));
+            console.log(new Date(new Date(item.end_time).getTime()));
             aaa.push({
               name: item.furnace,
               data: [
                 {
                   x: item.furnace,
                   y: [
-                    new Date(item.start_time).getTime(),
-                    new Date(item.end_time).getTime(),
+                    new Date(
+                      new Date(item.start_time).getTime() + 12600000
+                    ).getTime(),
+                    new Date(
+                      new Date(item.end_time).getTime() + 12600000
+                    ).getTime(),
+                    // new Date(item.end_time).getTime(),
                   ],
                 },
               ],
@@ -237,20 +252,11 @@ function DashboardPage() {
         <DashboardPinTimeChart series={planChartData} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <DashboardUsageChart
-          series={dolomiteSeries}
-          title="نمودار مصرف دولومیت"
-          categories={usageTimes}
-        />
-        <DashboardUsageChart
-          series={limeSeries}
-          title="نمودار مصرف اهک"
-          categories={usageTimes}
-        />
-        <DashboardUsageChart
-          series={ironSeries}
-          title="نمودار مصرف آهن"
-          categories={usageTimes}
+        <DashboardUseCharts
+          dolomiteSeries={dolomiteSeries}
+          ironSeries={ironSeries}
+          limeSeries={limeSeries}
+          usageTimes={usageTimes}
         />
       </TabPanel>
     </div>

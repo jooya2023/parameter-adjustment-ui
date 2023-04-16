@@ -2,6 +2,7 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
+import fa from "apexcharts/dist/locales/fa.json";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
